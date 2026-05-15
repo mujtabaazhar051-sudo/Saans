@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="سانس — پاکستان میں سگریٹ چھوڑنے کے لیے ہیلپ لائنز اور ہسپتال۔" />
+  <title>سانس — ہیلپ لائنز</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;600;700&family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <style>
+    .helplines-wrap {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 28px 80px;
+    }
+
+    /* ===== EMERGENCY STRIP ===== */
+    .emergency-strip {
+      background: linear-gradient(135deg, #c0392b, #e74c3c);
+      border-radius: var(--radius-md);
+      padding: 18px 22px;
+      display: flex; align-items: center; gap: 14px;
+      color: white; margin-bottom: 28px;
+      flex-wrap: wrap;
+    }
+    .es-icon { font-size: 1.8rem; flex-shrink: 0; }
+    .es-text { flex: 1; min-width: 160px; }
+    .es-text strong { display: block; font-size: 0.95rem; margin-bottom: 2px; }
+    .es-text span   { font-size: 0.82rem; color: rgba(255,255,255,.8); }
+    .es-num {
+      background: rgba(255,255,255,.2); color: white;
+      border: 1px solid rgba(255,255,255,.3);
+      padding: 8px 20px; border-radius: 999px;
+      font-size: 1rem; font-weight: 700;
+      font-family: var(--font-en); white-space: nowrap;
+      text-decoration: none; flex-shrink: 0;
+      transition: background var(--transition);
+    }
+    .es-num:hover { background: rgba(255,255,255,.35); }
+
+    /* ===== BLOCK TITLE ===== */
+    .block-title {
+      font-family: var(--font-disp); font-size: 1.15rem;
+      color: var(--ink); margin-bottom: 16px;
+      display: flex; align-items: center; gap: 8px;
+    }
+
+    /* ===== HELPLINE CARDS ===== */
+    .helpline-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px; margin-bottom: 36px;
+    }
+    .helpline-card {
+      background: white; border: 1px solid var(--border);
+      border-radius: var(--radius-lg); overflow: hidden;
+      transition: box-shadow var(--transition), transform var(--transition);
+    }
+    .helpline-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+    .hc-top {
+      padding: 20px 18px 14px;
+      position: relative; overflow: hidden;
+    }
+    .hc-top::before {
+      content: ""; position: absolute; top: 0; left: 0; right: 0;
+      height: 3px; background: linear-gradient(90deg, var(--green), var(--teal));
+    }
+    .hc-icon  { font-size: 1.8rem; display: block; margin-bottom: 8px; }
+    .hc-name  { font-family: var(--font-disp); font-size: 1rem; color: var(--ink); margin-bottom: 3px; }
+    .hc-org   { font-size: 0.78rem; color: var(--ink-3); }
+    .hc-body  { padding: 0 18px 16px; }
+    .hc-desc  { font-size: 0.82rem; color: var(--ink-2); line-height: 1.6; margin-bottom: 12px; }
+    .hc-num {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: var(--green-lt); color: var(--green);
+      padding: 8px 16px; border-radius: 999px;
+      font-size: 0.9rem; font-weight: 700;
+      font-family: var(--font-en); text-decoration: none;
+      transition: background var(--transition), transform var(--transition);
+      margin-bottom: 6px; display: block; width: fit-content;
+    }
+    .hc-num:hover { background: var(--green); color: white; transform: translateY(-1px); }
+    .hc-hours { font-size: 0.72rem; color: var(--ink-3); font-family: var(--font-en); }
+    .hc-free-tag {
+      display: inline-block; background: var(--green-lt); color: var(--green);
+      font-size: 0.68rem; font-weight: 700; padding: 2px 9px;
+      border-radius: 999px; font-family: var(--font-en); margin-top: 6px;
+    }
+
+    /* ===== HOSPITAL TABLE ===== */
+    .hospitals-list {
+      display: flex; flex-direction: column;
+      gap: 12px; margin-bottom: 36px;
+    }
+    .hospital-row {
+      background: white; border: 1px solid var(--border);
+      border-radius: var(--radius-md); padding: 16px 18px;
+      display: flex; align-items: flex-start; gap: 14px;
+      transition: box-shadow var(--transition);
+    }
+    .hospital-row:hover { box-shadow: var(--shadow-sm); }
+    .hr-city {
+      background: var(--green-lt); color: var(--green);
+      font-size: 0.72rem; font-weight: 700;
+      padding: 4px 12px; border-radius: 999px;
+      font-family: var(--font-en); flex-shrink: 0;
+      align-self: flex-start; margin-top: 2px;
+    }
+    .hr-info { flex: 1; }
+    .hr-name  { font-size: 0.92rem; font-weight: 700; color: var(--ink); margin-bottom: 3px; }
+    .hr-dept  { font-size: 0.78rem; color: var(--ink-3); margin-bottom: 4px; }
+    .hr-phone {
+      font-size: 0.82rem; color: var(--green);
+      font-family: var(--font-en); font-weight: 600;
+      text-decoration: none;
+    }
+    .hr-phone:hover { text-decoration: underline; }
+
+    /* ===== TIPS CARD ===== */
+    .call-tips {
+      background: linear-gradient(135deg, var(--green-xlt), #edf7f2);
+      border: 1px solid #b8dfc8; border-radius: var(--radius-md);
+      padding: 20px 22px; margin-bottom: 28px;
+    }
+    .call-tips h4 { font-size: 0.92rem; font-weight: 700; color: var(--green); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+    .call-tips ul { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+    .call-tips li {
+      font-size: 0.83rem; color: var(--ink-2); line-height: 1.5;
+      display: flex; align-items: flex-start; gap: 7px;
+    }
+    .call-tips li::before { content:"→"; color:var(--green); flex-shrink:0; }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 560px) {
+      .helplines-wrap { padding: 28px 16px 60px; }
+      .helpline-grid  { grid-template-columns: 1fr; }
+      .emergency-strip{ flex-direction: column; align-items: flex-start; }
+    }
+    .en-mode .helpline-card  { direction: ltr; }
+    .en-mode .hospital-row   { direction: ltr; }
+    .en-mode .emergency-strip{ direction: ltr; }
+    .en-mode .call-tips      { direction: ltr; }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav" id="mainNav">
+    <div class="nav-logo">سانس<span>•</span></div>
+    <div class="nav-right">
+      <a href="app.html" class="back-btn" id="backBtn">← ہوم</a>
+      <a href="settings.html" class="back-btn" title="Settings" id="navSettings" style="padding:8px 10px;">⚙️</a>
+      <div class="lang-pill">
+        <button class="lang-btn active" id="btn-ur">اردو</button>
+        <button class="lang-btn" id="btn-en">English</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <div class="page-hero">
+    <div class="page-hero-inner">
+      <div class="page-badge" id="pageBadge">📞 ہیلپ لائنز</div>
+      <h1 id="pageTitle">مدد صرف ایک کال دور ہے</h1>
+      <p id="pageSubtitle">پاکستان میں سگریٹ چھوڑنے کے لیے ہیلپ لائنز اور ہسپتال</p>
+    </div>
+  </div>
+
+  <div class="helplines-wrap">
+
+    <!-- Emergency -->
+    <div class="emergency-strip">
+      <div class="es-icon">🚨</div>
+      <div class="es-text">
+        <strong id="esTitle">طبی ایمرجنسی؟</strong>
+        <span id="esDesc">فوری طبی مدد کے لیے</span>
+      </div>
+      <a href="tel:1122" class="es-num">1122</a>
+    </div>
+
+    <!-- Helplines -->
+    <div class="block-title"><span>📞</span><span id="helplineTitle">قومی ہیلپ لائنز</span></div>
+    <div class="helpline-grid" id="helplineGrid"></div>
+
+    <!-- Call tips -->
+    <div class="call-tips">
+      <h4><span>💡</span><span id="callTipsTitle">کال کرنے کے نکات</span></h4>
+      <ul id="callTipsList"></ul>
+    </div>
+
+    <!-- Hospitals -->
+    <div class="block-title"><span>🏥</span><span id="hospitalTitle">شہروں میں ہسپتال</span></div>
+    <div class="hospitals-list" id="hospitalsList"></div>
+
+    <!-- Resources link card -->
+    <div style="background:linear-gradient(135deg,var(--green-xlt),#edf7f2);border:1px solid #b8dfc8;border-radius:var(--radius-lg);padding:22px 20px;display:flex;align-items:center;gap:16px;margin-bottom:28px;flex-wrap:wrap;">
+      <div style="font-size:2rem;flex-shrink:0;">📚</div>
+      <div style="flex:1;min-width:160px;">
+        <div style="font-family:var(--font-disp);font-size:1rem;color:var(--green);margin-bottom:4px;" id="resCardTitle">مددگار کتابیں اور وسائل</div>
+        <div style="font-size:0.82rem;color:var(--ink-2);line-height:1.5;" id="resCardDesc">Atomic Habits، Allen Carr اور مزید کتابیں — ویب سائٹس اور تحقیق بھی</div>
+      </div>
+      <a href="resources.html" style="background:var(--green);color:white;padding:10px 22px;border-radius:999px;font-size:0.85rem;font-weight:700;text-decoration:none;flex-shrink:0;font-family:var(--font-en);transition:background 0.25s ease;" id="resCardBtn">دیکھیں →</a>
+    </div>
+
+        <!-- Disclaimer -->
+    <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-md);padding:16px 18px;font-size:0.78rem;color:var(--ink-3);line-height:1.6;">
+      <strong id="disclaimerTitle">⚠️ نوٹ:</strong> <span id="disclaimerText">یہ معلومات عمومی رہنمائی کے لیے ہیں۔ نمبر تبدیل ہو سکتے ہیں — براہ کرم کال سے پہلے تصدیق کریں۔ ہنگامی صورت میں فوری طور پر 1122 یا 115 پر کال کریں۔</span>
+    </div>
+
+  </div>
+
+  <footer><p>© 2025 سانس · پاکستان کے لیے بنایا گیا ❤️</p></footer>
+
+  <script src="utils.js"></script>
+  <script>
+    const PG = {
+      ur: {
+        backBtn:"← ہوم", pageBadge:"📞 ہیلپ لائنز",
+        pageTitle:"مدد صرف ایک کال دور ہے",
+        pageSubtitle:"پاکستان میں سگریٹ چھوڑنے کے لیے ہیلپ لائنز اور ہسپتال",
+        esTitle:"طبی ایمرجنسی؟", esDesc:"فوری طبی مدد کے لیے",
+        helplineTitle:"قومی ہیلپ لائنز",
+        callTipsTitle:"کال کرنے کے نکات",
+        hospitalTitle:"شہروں میں ہسپتال",
+        resCardTitle:"مددگار کتابیں اور وسائل",
+        resCardDesc:"Atomic Habits، Allen Carr اور مزید کتابیں — ویب سائٹس اور تحقیق بھی",
+        resCardBtn:"دیکھیں →",
+        disclaimerTitle:"⚠️ نوٹ:", disclaimerText:"یہ معلومات عمومی رہنمائی کے لیے ہیں۔ نمبر تبدیل ہو سکتے ہیں — براہ کرم کال سے پہلے تصدیق کریں۔",
+        freeTag:"مفت",
+        helplines:[
+          { icon:"🏛️", name:"صحت عامہ ہیلپ لائن", org:"وزارت صحت، پاکستان", desc:"سگریٹ چھوڑنے کے لیے مفت مشاورت اور رہنمائی۔", num:"0800-02345", hours:"پیر تا جمعہ، صبح 9 سے شام 5", free:true },
+          { icon:"🧠", name:"ذہنی صحت ہیلپ لائن", org:"WHO پاکستان پارٹنر", desc:"ذہنی دباؤ اور نشے کے مسائل کے لیے پیشہ ورانہ مدد۔", num:"0311-7786264", hours:"24 گھنٹے، 7 دن", free:true },
+          { icon:"❤️", name:"سیہت کاروان", org:"پنجاب ہیلتھ اتھارٹی", desc:"تمباکو کنٹرول اور صحت عامہ کی مفت رہنمائی۔", num:"0800-99000", hours:"دفتری اوقات", free:true },
+          { icon:"🩺", name:"ایمرجنسی سروسز", org:"ریسکیو 1122", desc:"طبی ایمرجنسی یا دل کے دورے کی صورت میں فوری مدد۔", num:"1122", hours:"24 گھنٹے", free:true },
+        ],
+        callTips:[
+          "کال کرنے سے پہلے اپنی تاریخ چھوڑنے اور سگریٹ کی تعداد نوٹ کر لیں۔",
+          "بتائیں کہ آپ کتنے سالوں سے پی رہے ہیں اور پہلے کتنی بار چھوڑنے کی کوشش کی۔",
+          "ڈاکٹر سے NRT (گم یا پیچ) کے بارے میں بھی پوچھیں۔",
+          "فالو اپ اپوائنٹمنٹ لیں — ایک بار کال کافی نہیں۔",
+        ],
+        hospitals:[
+          { city:"کراچی",      name:"آغا خان یونیورسٹی ہسپتال",    dept:"سینہ امراض و پلمونولوجی", phone:"021-34864000" },
+          { city:"کراچی",      name:"جناح پوسٹ گریجویٹ میڈیکل سنٹر", dept:"نشہ چھوڑنے کا کلینک", phone:"021-99201300" },
+          { city:"لاہور",      name:"شوکت خانم میموریل ہسپتال",      dept:"تمباکو کلینک",           phone:"042-35905000" },
+          { city:"لاہور",      name:"میو ہسپتال",                    dept:"سینہ وارڈ",               phone:"042-99231479" },
+          { city:"اسلام آباد", name:"پمز ہسپتال",                    dept:"پلمونولوجی ڈیپارٹمنٹ",    phone:"051-9261170" },
+          { city:"اسلام آباد", name:"فیڈرل گورنمنٹ پولی کلینک",      dept:"جنرل میڈیسن",             phone:"051-9106000" },
+          { city:"پشاور",      name:"حیات آباد میڈیکل کمپلیکس",      dept:"سینہ امراض",              phone:"091-9217300" },
+          { city:"کوئٹہ",      name:"بولان میڈیکل کالج ہسپتال",       dept:"میڈیسن ڈیپارٹمنٹ",       phone:"081-9201290" },
+        ],
+      },
+      en: {
+        backBtn:"← Home", pageBadge:"📞 Helplines",
+        pageTitle:"Help Is Just a Call Away",
+        pageSubtitle:"Helplines and hospitals across Pakistan to help you quit smoking",
+        esTitle:"Medical Emergency?", esDesc:"For immediate medical help",
+        helplineTitle:"National Helplines",
+        callTipsTitle:"Tips Before You Call",
+        hospitalTitle:"Hospitals by City",
+        resCardTitle:"Helpful Books & Resources",
+        resCardDesc:"Atomic Habits, Allen Carr and more — plus websites and research",
+        resCardBtn:"Explore →",
+        disclaimerTitle:"⚠️ Note:", disclaimerText:"This information is for general guidance. Numbers may change — please verify before calling.",
+        freeTag:"Free",
+        helplines:[
+          { icon:"🏛️", name:"Public Health Helpline",   org:"Ministry of Health, Pakistan", desc:"Free counselling and guidance for quitting tobacco.",         num:"0800-02345",    hours:"Mon–Fri, 9am–5pm",  free:true },
+          { icon:"🧠", name:"Mental Health Helpline",   org:"WHO Pakistan Partner",         desc:"Professional support for stress, addiction and mental health.", num:"0311-7786264",  hours:"24/7",              free:true },
+          { icon:"❤️", name:"Sehat Karwan",             org:"Punjab Health Authority",      desc:"Tobacco control and public health guidance.",                  num:"0800-99000",    hours:"Office hours",      free:true },
+          { icon:"🩺", name:"Emergency Services",       org:"Rescue 1122",                  desc:"For medical emergencies including heart attacks.",              num:"1122",          hours:"24/7",              free:true },
+        ],
+        callTips:[
+          "Note your quit date and daily cigarette count before calling.",
+          "Tell the advisor how long you have smoked and how many times you have tried to quit.",
+          "Ask about NRT options (gum or patches) during the call.",
+          "Book a follow-up appointment — one call is rarely enough.",
+        ],
+        hospitals:[
+          { city:"Karachi",    name:"Aga Khan University Hospital",      dept:"Chest & Pulmonology",     phone:"021-34864000" },
+          { city:"Karachi",    name:"Jinnah Postgraduate Medical Centre", dept:"Addiction Clinic",        phone:"021-99201300" },
+          { city:"Lahore",     name:"Shaukat Khanum Memorial Hospital",  dept:"Tobacco Clinic",          phone:"042-35905000" },
+          { city:"Lahore",     name:"Mayo Hospital",                     dept:"Chest Ward",              phone:"042-99231479" },
+          { city:"Islamabad",  name:"PIMS Hospital",                     dept:"Pulmonology Department",  phone:"051-9261170" },
+          { city:"Islamabad",  name:"Federal Government Polyclinic",     dept:"General Medicine",        phone:"051-9106000" },
+          { city:"Peshawar",   name:"Hayatabad Medical Complex",         dept:"Chest Diseases",          phone:"091-9217300" },
+          { city:"Quetta",     name:"Bolan Medical College Hospital",    dept:"Medicine Department",     phone:"081-9201290" },
+        ],
+      },
+    };
+
+    function renderHelplines(lang) {
+      const c    = PG[lang];
+      const grid = document.getElementById('helplineGrid');
+      grid.innerHTML = '';
+      c.helplines.forEach(h => {
+        const card = document.createElement('div');
+        card.className = 'helpline-card';
+        card.innerHTML = `
+          <div class="hc-top">
+            <span class="hc-icon">${h.icon}</span>
+            <div class="hc-name">${h.name}</div>
+            <div class="hc-org">${h.org}</div>
+          </div>
+          <div class="hc-body">
+            <div class="hc-desc">${h.desc}</div>
+            <a href="tel:${h.num}" class="hc-num">📞 ${h.num}</a>
+            <div class="hc-hours">🕐 ${h.hours}</div>
+            ${h.free ? `<span class="hc-free-tag">${c.freeTag} ✓</span>` : ''}
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function renderHospitals(lang) {
+      const c    = PG[lang];
+      const list = document.getElementById('hospitalsList');
+      list.innerHTML = '';
+      c.hospitals.forEach(h => {
+        const row = document.createElement('div');
+        row.className = 'hospital-row';
+        row.innerHTML = `
+          <span class="hr-city">${h.city}</span>
+          <div class="hr-info">
+            <div class="hr-name">${h.name}</div>
+            <div class="hr-dept">🏥 ${h.dept}</div>
+            <a href="tel:${h.phone}" class="hr-phone">📞 ${h.phone}</a>
+          </div>
+        `;
+        list.appendChild(row);
+      });
+    }
+
+    function renderCallTips(lang) {
+      const list = document.getElementById('callTipsList');
+      list.innerHTML = '';
+      PG[lang].callTips.forEach(tip => {
+        const li = document.createElement('li');
+        li.textContent = tip;
+        list.appendChild(li);
+      });
+    }
+
+    function applyTranslations(lang) {
+      const c   = PG[lang];
+      const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+      set('backBtn', c.backBtn); set('pageBadge', c.pageBadge);
+      set('pageTitle', c.pageTitle); set('pageSubtitle', c.pageSubtitle);
+      set('esTitle', c.esTitle); set('esDesc', c.esDesc);
+      set('helplineTitle', c.helplineTitle);
+      set('callTipsTitle', c.callTipsTitle);
+      set('hospitalTitle', c.hospitalTitle);
+      set('resCardTitle', c.resCardTitle);
+      set('resCardDesc', c.resCardDesc);
+      set('resCardBtn', c.resCardBtn);
+      set('disclaimerTitle', c.disclaimerTitle);
+      set('disclaimerText', c.disclaimerText);
+      renderHelplines(lang);
+      renderCallTips(lang);
+      renderHospitals(lang);
+    }
+
+    initNavScroll();
+    initReveal();
+    initLang(applyTranslations);
+  </script>
+  <script src="chat.js"></script>
+</body>
+</html>

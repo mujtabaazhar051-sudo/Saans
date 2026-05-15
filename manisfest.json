@@ -1,0 +1,30 @@
+{
+  "name": "سانس — سگریٹ چھوڑیں",
+  "short_name": "سانس",
+  "description": "Pakistan's bilingual quit-smoking companion",
+  "start_url": "/saans/app.html",
+  "display": "standalone",
+  "background_color": "#0d3d26",
+  "theme_color": "#1a7a4a",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["health", "lifestyle"],
+  "lang": "ur",
+  "dir": "rtl"
+}

@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="سانس — اپنی ترجیحات اور پروفائل اپ ڈیٹ کریں۔" />
+  <title>سانس — ترتیبات</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;600;700&family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <style>
+    .settings-wrap {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 40px 28px 80px;
+    }
+
+    /* ===== SECTION CARD ===== */
+    .settings-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+    .sc-header {
+      background: linear-gradient(135deg, var(--green-xlt), #edf7f2);
+      border-bottom: 1px solid #b8dfc8;
+      padding: 16px 22px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .sc-header-icon { font-size: 1.2rem; }
+    .sc-header h3 {
+      font-family: var(--font-disp);
+      font-size: 1rem; color: var(--green); margin: 0;
+    }
+    .sc-body { padding: 20px 22px; display: flex; flex-direction: column; gap: 16px; }
+
+    /* ===== FORM FIELDS ===== */
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-label { font-size: 0.82rem; font-weight: 600; color: var(--ink-2); }
+    .form-input, .form-select {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      font-size: 0.92rem; font-family: inherit;
+      color: var(--ink); background: var(--bg);
+      outline: none; width: 100%;
+      transition: border-color var(--transition), box-shadow var(--transition);
+    }
+    .form-input:focus, .form-select:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(26,122,74,.1);
+      background: white;
+    }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .form-hint { font-size: 0.75rem; color: var(--ink-3); }
+
+    /* ===== SAVE BUTTON ===== */
+    .save-btn {
+      background: var(--green); color: white;
+      border: none; padding: 11px 28px;
+      border-radius: 999px; font-size: 0.92rem;
+      font-weight: 700; cursor: pointer;
+      font-family: inherit;
+      transition: background var(--transition), transform var(--transition);
+      display: flex; align-items: center; gap: 8px;
+      align-self: flex-start;
+    }
+    .save-btn:hover { background: var(--teal); transform: translateY(-1px); }
+
+    /* ===== DANGER ZONE ===== */
+    .danger-card {
+      background: white;
+      border: 1px solid #f5c0bb;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+    .danger-header {
+      background: #fde8e8;
+      border-bottom: 1px solid #f5c0bb;
+      padding: 14px 22px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .danger-header h3 { font-family: var(--font-disp); font-size: 1rem; color: var(--danger); margin: 0; }
+    .danger-body { padding: 18px 22px; display: flex; flex-direction: column; gap: 14px; }
+    .danger-row {
+      display: flex; align-items: center;
+      justify-content: space-between; gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .danger-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .danger-info h4 { font-size: 0.9rem; font-weight: 700; color: var(--ink); margin-bottom: 3px; }
+    .danger-info p  { font-size: 0.78rem; color: var(--ink-3); line-height: 1.5; }
+    .danger-btn {
+      border: 1px solid; padding: 8px 18px;
+      border-radius: 999px; font-size: 0.82rem;
+      font-weight: 600; cursor: pointer;
+      font-family: inherit; white-space: nowrap;
+      transition: all var(--transition); flex-shrink: 0;
+    }
+    .danger-btn-warn {
+      border-color: var(--accent); color: var(--accent);
+      background: rgba(244,161,46,.08);
+    }
+    .danger-btn-warn:hover { background: rgba(244,161,46,.18); }
+    .danger-btn-red {
+      border-color: var(--danger); color: var(--danger);
+      background: rgba(192,57,43,.06);
+    }
+    .danger-btn-red:hover { background: rgba(192,57,43,.14); }
+
+    /* ===== DATA SUMMARY ===== */
+    .data-summary {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px; margin-bottom: 24px;
+    }
+    .ds-card {
+      background: white; border: 1px solid var(--border);
+      border-radius: var(--radius-md); padding: 16px 12px;
+      text-align: center; position: relative; overflow: hidden;
+    }
+    .ds-card::before {
+      content: ""; position: absolute; top: 0; left: 0; right: 0;
+      height: 3px; background: linear-gradient(90deg, var(--green), var(--teal));
+    }
+    .ds-num {
+      font-family: var(--font-disp); font-size: 1.5rem;
+      color: var(--green); font-weight: 700;
+      display: block; line-height: 1; margin-bottom: 4px;
+    }
+    .ds-label { font-size: 0.72rem; color: var(--ink-3); }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 560px) {
+      .settings-wrap { padding: 28px 16px 60px; }
+      .form-row { grid-template-columns: 1fr; }
+      .data-summary { grid-template-columns: 1fr 1fr; }
+      .danger-row { flex-direction: column; align-items: flex-start; }
+    }
+    .en-mode .sc-body    { direction: ltr; }
+    .en-mode .danger-body{ direction: ltr; }
+    .en-mode .danger-row { direction: ltr; }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav" id="mainNav">
+    <div class="nav-logo">سانس<span>•</span></div>
+    <div class="nav-right">
+      <a href="app.html" class="back-btn" id="backBtn">← ہوم</a>
+      <div class="lang-pill">
+        <button class="lang-btn active" id="btn-ur">اردو</button>
+        <button class="lang-btn" id="btn-en">English</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <div class="page-hero">
+    <div class="page-hero-inner">
+      <div class="page-badge" id="pageBadge">⚙️ ترتیبات</div>
+      <h1 id="pageTitle">ترتیبات</h1>
+      <p id="pageSubtitle">اپنا پروفائل اور عادت کی تفصیل اپ ڈیٹ کریں</p>
+    </div>
+  </div>
+
+  <div class="settings-wrap">
+
+    <!-- Data summary -->
+    <div class="data-summary">
+      <div class="ds-card">
+        <span class="ds-num" id="dsDays">0</span>
+        <span class="ds-label" id="dsDaysLabel">دن سگریٹ فری</span>
+      </div>
+      <div class="ds-card">
+        <span class="ds-num" id="dsStreak">0</span>
+        <span class="ds-label" id="dsStreakLabel">سٹریک</span>
+      </div>
+      <div class="ds-card">
+        <span class="ds-num" id="dsSaved">0</span>
+        <span class="ds-label" id="dsSavedLabel">PKR بچت</span>
+      </div>
+    </div>
+
+    <!-- Profile -->
+    <div class="settings-card">
+      <div class="sc-header">
+        <span class="sc-header-icon">👤</span>
+        <h3 id="profileTitle">پروفائل</h3>
+      </div>
+      <div class="sc-body">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" id="lblName">نام یا عرفی نام</label>
+            <input type="text" class="form-input" id="inpName" maxlength="40">
+          </div>
+          <div class="form-group">
+            <label class="form-label" id="lblCity">شہر</label>
+            <input type="text" class="form-input" id="inpCity" maxlength="40">
+          </div>
+        </div>
+        <button class="save-btn" onclick="saveProfile()">
+          <span>✓</span><span id="saveProfileLabel">محفوظ کریں</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Quit date -->
+    <div class="settings-card">
+      <div class="sc-header">
+        <span class="sc-header-icon">📅</span>
+        <h3 id="quitDateTitle">چھوڑنے کی تاریخ</h3>
+      </div>
+      <div class="sc-body">
+        <div class="form-group">
+          <label class="form-label" id="lblQuitDate">تاریخ</label>
+          <input type="date" class="form-input" id="inpQuitDate">
+          <span class="form-hint" id="quitDateHint">یہ تاریخ تمام حسابات میں استعمال ہوتی ہے</span>
+        </div>
+        <button class="save-btn" onclick="saveQuitDate()">
+          <span>✓</span><span id="saveQuitLabel">محفوظ کریں</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Smoking habits -->
+    <div class="settings-card">
+      <div class="sc-header">
+        <span class="sc-header-icon">🚬</span>
+        <h3 id="habitsTitle">سگریٹ کی عادت</h3>
+      </div>
+      <div class="sc-body">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" id="lblCpd">روزانہ سگریٹ</label>
+            <input type="number" class="form-input" id="inpCpd" min="1" max="100">
+          </div>
+          <div class="form-group">
+            <label class="form-label" id="lblPp">پیکٹ کی قیمت (PKR)</label>
+            <input type="number" class="form-input" id="inpPp" min="100" max="5000">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" id="lblCpp">پیکٹ میں سگریٹ</label>
+            <input type="number" class="form-input" id="inpCpp" min="10" max="50">
+          </div>
+          <div class="form-group">
+            <label class="form-label" id="lblYrs">سگریٹ نوشی کے سال</label>
+            <input type="number" class="form-input" id="inpYrs" min="1" max="60">
+          </div>
+        </div>
+        <button class="save-btn" onclick="saveHabits()">
+          <span>✓</span><span id="saveHabitsLabel">محفوظ کریں</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- AI Coach API Key -->
+    <div class="settings-card">
+      <div class="sc-header">
+        <span class="sc-header-icon">🤖</span>
+        <h3 id="apiKeyTitle">AI کوچ — API Key</h3>
+      </div>
+      <div class="sc-body">
+        <div class="form-group">
+          <label class="form-label" id="lblApiKey">Anthropic API Key</label>
+          <input type="password" class="form-input" id="inpApiKey"
+            placeholder="sk-ant-..." autocomplete="off" style="font-family:var(--font-en);">
+          <span class="form-hint" id="apiKeyHint">آپ کی key صرف اس ڈیوائس پر محفوظ رہتی ہے — کسی سرور پر نہیں جاتی</span>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="save-btn" onclick="saveApiKey()">
+            <span>✓</span><span id="saveApiLabel">Key محفوظ کریں</span>
+          </button>
+          <a href="https://console.anthropic.com" target="_blank"
+            style="display:inline-flex;align-items:center;gap:6px;padding:10px 18px;border-radius:999px;border:1px solid var(--border);color:var(--ink-2);font-size:0.85rem;font-weight:600;font-family:var(--font-en);text-decoration:none;transition:all 0.25s ease;"
+            id="getKeyLink">Key لیں ↗</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Danger zone -->
+    <div class="danger-card">
+      <div class="danger-header">
+        <span>⚠️</span>
+        <h3 id="dangerTitle">خطرے کا علاقہ</h3>
+      </div>
+      <div class="danger-body">
+        <div class="danger-row">
+          <div class="danger-info">
+            <h4 id="resetObTitle">سوالنامہ دوبارہ کریں</h4>
+            <p id="resetObDesc">پروفائل سوالنامہ دوبارہ شروع کریں۔ موجودہ پیش رفت محفوظ رہے گی۔</p>
+          </div>
+          <button class="danger-btn danger-btn-warn" onclick="resetOnboarding()" id="resetObBtn">دوبارہ کریں</button>
+        </div>
+        <div class="danger-row">
+          <div class="danger-info">
+            <h4 id="clearCheckinTitle">چیک‑ان مٹائیں</h4>
+            <p id="clearCheckinDesc">تمام روزانہ چیک‑ان کا ریکارڈ حذف کریں۔</p>
+          </div>
+          <button class="danger-btn danger-btn-red" onclick="clearCheckins()" id="clearCheckinBtn">حذف کریں</button>
+        </div>
+        <div class="danger-row">
+          <div class="danger-info">
+            <h4 id="clearAllTitle">سب کچھ ری سیٹ کریں</h4>
+            <p id="clearAllDesc">تمام ڈیٹا حذف کریں اور نئے سرے سے شروع کریں۔</p>
+          </div>
+          <button class="danger-btn danger-btn-red" onclick="clearAll()" id="clearAllBtn">مکمل ری سیٹ</button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /settings-wrap -->
+
+  <footer>
+    <p>© 2025 سانس · پاکستان کے لیے بنایا گیا ❤️</p>
+  </footer>
+
+  <script src="utils.js"></script>
+  <script>
+    /* ===== TRANSLATIONS ===== */
+    const PG = {
+      ur: {
+        backBtn: "← ہوم", pageBadge: "⚙️ ترتیبات",
+        pageTitle: "ترتیبات", pageSubtitle: "اپنا پروفائل اور عادت کی تفصیل اپ ڈیٹ کریں",
+        dsDaysLabel: "دن سگریٹ فری", dsStreakLabel: "سٹریک", dsSavedLabel: "PKR بچت",
+        profileTitle: "پروفائل",
+        lblName: "نام یا عرفی نام", lblCity: "شہر",
+        saveProfileLabel: "محفوظ کریں",
+        quitDateTitle: "چھوڑنے کی تاریخ",
+        lblQuitDate: "تاریخ",
+        quitDateHint: "یہ تاریخ تمام حسابات میں استعمال ہوتی ہے",
+        saveQuitLabel: "محفوظ کریں",
+        habitsTitle: "سگریٹ کی عادت",
+        lblCpd: "روزانہ سگریٹ", lblPp: "پیکٹ کی قیمت (PKR)",
+        lblCpp: "پیکٹ میں سگریٹ", lblYrs: "سگریٹ نوشی کے سال",
+        saveHabitsLabel: "محفوظ کریں",
+        dangerTitle: "خطرے کا علاقہ",
+        resetObTitle: "سوالنامہ دوبارہ کریں",
+        resetObDesc: "پروفائل سوالنامہ دوبارہ شروع کریں۔ موجودہ پیش رفت محفوظ رہے گی۔",
+        resetObBtn: "دوبارہ کریں",
+        clearCheckinTitle: "چیک‑ان مٹائیں",
+        clearCheckinDesc: "تمام روزانہ چیک‑ان کا ریکارڈ حذف کریں۔",
+        clearCheckinBtn: "حذف کریں",
+        clearAllTitle: "سب کچھ ری سیٹ کریں",
+        clearAllDesc: "تمام ڈیٹا حذف کریں اور نئے سرے سے شروع کریں۔",
+        clearAllBtn: "مکمل ری سیٹ",
+        apiKeyTitle: "AI کوچ — API Key",
+        lblApiKey: "Anthropic API Key",
+        apiKeyHint: "آپ کی key صرف اس ڈیوائس پر محفوظ رہتی ہے — کسی سرور پر نہیں جاتی",
+        saveApiLabel: "Key محفوظ کریں",
+        getKeyLink: "Key لیں ↗",
+        toastProfile: "✓ پروفائل محفوظ!",
+        toastQuit: "✓ تاریخ محفوظ!",
+        toastHabits: "✓ عادت محفوظ!",
+        toastOb: "سوالنامہ ری سیٹ ہو گیا",
+        toastCheckins: "✓ چیک‑ان حذف ہو گئے",
+        toastAll: "✓ سب ری سیٹ ہو گیا",
+        confirmCheckins: "کیا آپ واقعی تمام چیک‑ان حذف کرنا چاہتے ہیں؟",
+        confirmAll: "کیا آپ واقعی سب کچھ حذف کرنا چاہتے ہیں؟ یہ عمل واپس نہیں ہو سکتا۔",
+      },
+      en: {
+        backBtn: "← Home", pageBadge: "⚙️ Settings",
+        pageTitle: "Settings", pageSubtitle: "Update your profile and smoking habit details",
+        dsDaysLabel: "Days Smoke-Free", dsStreakLabel: "Streak", dsSavedLabel: "PKR Saved",
+        profileTitle: "Profile",
+        lblName: "Name or nickname", lblCity: "City",
+        saveProfileLabel: "Save",
+        quitDateTitle: "Quit Date",
+        lblQuitDate: "Date",
+        quitDateHint: "This date is used in all calculations",
+        saveQuitLabel: "Save",
+        habitsTitle: "Smoking Habit",
+        lblCpd: "Cigarettes per day", lblPp: "Pack price (PKR)",
+        lblCpp: "Cigarettes per pack", lblYrs: "Years smoked",
+        saveHabitsLabel: "Save",
+        dangerTitle: "Danger Zone",
+        resetObTitle: "Redo Questionnaire",
+        resetObDesc: "Restart the profile questionnaire. Your progress will be kept.",
+        resetObBtn: "Redo",
+        clearCheckinTitle: "Clear Check-ins",
+        clearCheckinDesc: "Delete all daily check-in records.",
+        clearCheckinBtn: "Delete",
+        clearAllTitle: "Reset Everything",
+        clearAllDesc: "Delete all data and start fresh.",
+        clearAllBtn: "Full Reset",
+        apiKeyTitle: "AI Coach — API Key",
+        lblApiKey: "Anthropic API Key",
+        apiKeyHint: "Your key is stored only on this device — never sent to any server",
+        saveApiLabel: "Save Key",
+        getKeyLink: "Get API Key ↗",
+        toastProfile: "✓ Profile saved!",
+        toastQuit: "✓ Quit date saved!",
+        toastHabits: "✓ Habits saved!",
+        toastOb: "Questionnaire reset",
+        toastCheckins: "✓ Check-ins cleared",
+        toastAll: "✓ Everything reset",
+        confirmCheckins: "Are you sure you want to delete all check-ins?",
+        confirmAll: "Are you sure you want to delete everything? This cannot be undone.",
+      },
+    };
+
+    /* ===== LOAD VALUES ===== */
+    function loadValues() {
+      document.getElementById('inpName').value    = LS.get('userName', '');
+      document.getElementById('inpCity').value    = LS.get('userCity', '');
+      document.getElementById('inpQuitDate').value= LS.get('quitDate', '') || new Date().toISOString().slice(0,10);
+      document.getElementById('inpCpd').value     = LS.get('cigsPerDay',  20);
+      document.getElementById('inpPp').value      = LS.get('packPrice',  600);
+      document.getElementById('inpCpp').value     = LS.get('cigsPerPack', 20);
+      document.getElementById('inpYrs').value     = LS.get('smokingYears', 1);
+      const savedKey = LS.get('anthropicApiKey', '');
+      if (savedKey) document.getElementById('inpApiKey').value = '•'.repeat(20);
+
+      // Stats
+      document.getElementById('dsDays').textContent   = getDaysSinceQuit();
+      document.getElementById('dsStreak').textContent = getStreak();
+      document.getElementById('dsSaved').textContent  = getSavings().toLocaleString();
+    }
+
+    /* ===== SAVE FUNCTIONS ===== */
+
+    function saveApiKey() {
+      const lang = document.body.classList.contains('en-mode') ? 'en' : 'ur';
+      const key  = document.getElementById('inpApiKey').value.trim();
+      if (key) {
+        LS.set('anthropicApiKey', key);
+        showToast(lang === 'ur' ? '✓ API key محفوظ!' : '✓ API key saved!');
+      } else {
+        LS.remove('anthropicApiKey');
+        showToast(lang === 'ur' ? 'Key ہٹا دی گئی' : 'API key removed');
+      }
+    }
+
+    function saveProfile() {
+      const lang = document.body.classList.contains('en-mode') ? 'en' : 'ur';
+      LS.set('userName', document.getElementById('inpName').value.trim());
+      LS.set('userCity',  document.getElementById('inpCity').value.trim());
+      showToast(PG[lang].toastProfile);
+    }
+
+    function saveQuitDate() {
+      const lang = document.body.classList.contains('en-mode') ? 'en' : 'ur';
+      const val  = document.getElementById('inpQuitDate').value;
+      if (val) { LS.set('quitDate', val); loadValues(); showToast(PG[lang].toastQuit); }
+    }
+
+    function saveHabits() {
+      const lang = document.body.classList.contains('en-mode') ? 'en' : 'ur';
+      LS.set('cigsPerDay',   parseInt(document.getElementById('inpCpd').value) || 20);
+      LS.set('packPrice',    parseInt(document.getElementById('inpPp').value)  || 600);
+      LS.set('cigsPerPack',  parseInt(document.getElementById('inpCpp').value) || 20);
+      LS.set('smokingYears', parseInt(document.getElementById('inpYrs').value) || 1);
+      loadValues();
+      showToast(PG[lang].toastHabits);
+    }
+
+    /* ===== DANGER ZONE ===== */
+    function resetOnboarding() {
+      const lang = document.body.classList.contains('en-mode') ? 'en' : 'ur';
+      LS.remove('onboardingDone');
+      showToast(PG[lang].toastOb);
+      setTimeout(() => { window.location.href = 'app.html'; }, 800);
+    }
+
+    function clearCheckins() {
+      const lang = document.body.classList.contains('en-mode') ? 'en' : 'ur';
+      if (!confirm(PG[lang].confirmCheckins)) return;
+      LS.remove('checkins');
+      loadValues();
+      showToast(PG[lang].toastCheckins);
+    }
+
+    function clearAll() {
+      const lang = document.body.classList.contains('en-mode') ? 'en' : 'ur';
+      if (!confirm(PG[lang].confirmAll)) return;
+      localStorage.clear();
+      showToast(PG[lang].toastAll);
+      setTimeout(() => { window.location.href = 'app.html'; }, 900);
+    }
+
+    /* ===== APPLY TRANSLATIONS ===== */
+    function applyTranslations(lang) {
+      const c   = PG[lang];
+      const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+      Object.keys(c).forEach(k => set(k, c[k]));
+      loadValues();
+    }
+
+    /* ===== INIT ===== */
+    initNavScroll();
+    initLang(applyTranslations);
+  </script>
+  <script src="chat.js"></script>
+</body>
+</html>

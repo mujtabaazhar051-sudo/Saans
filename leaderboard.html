@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>سانس — لیڈر بورڈ</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;600;700&family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1a7a4a">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <style>
+    .lb-wrap {
+      max-width: 700px; margin: 0 auto; padding: 40px 24px 80px;
+    }
+
+    /* ===== MY RANK CARD ===== */
+    .my-rank-card {
+      background: linear-gradient(135deg, var(--green), var(--teal));
+      border-radius: var(--radius-lg); padding: 24px 22px;
+      color: white; margin-bottom: 28px;
+      display: flex; align-items: center; gap: 18px;
+      position: relative; overflow: hidden;
+    }
+    .my-rank-card::before {
+      content: ""; position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px);
+      background-size: 32px 32px;
+    }
+    .mrc-inner { position: relative; z-index: 1; display: flex; align-items: center; gap: 18px; width: 100%; }
+    .mrc-rank  { font-family: var(--font-disp); font-size: 2.5rem; color: white; font-weight: 700; line-height: 1; flex-shrink: 0; }
+    .mrc-info  { flex: 1; }
+    .mrc-name  { font-size: 1rem; font-weight: 700; color: white; margin-bottom: 3px; }
+    .mrc-days  { font-size: 0.85rem; color: rgba(255,255,255,.7); }
+    .mrc-badge { background: rgba(255,255,255,.2); border: 1px solid rgba(255,255,255,.3); border-radius: 999px; padding: 6px 16px; font-size: 0.82rem; font-weight: 700; color: white; flex-shrink: 0; }
+
+    /* ===== FILTER TABS ===== */
+    .lb-tabs {
+      display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap;
+    }
+    .lb-tab {
+      border: 1px solid var(--border); background: white;
+      color: var(--ink-2); padding: 7px 18px;
+      border-radius: 999px; font-size: 0.83rem; font-weight: 600;
+      cursor: pointer; font-family: inherit;
+      transition: all var(--transition);
+    }
+    .lb-tab.active { background: var(--green); color: white; border-color: var(--green); }
+
+    /* ===== LEADERBOARD LIST ===== */
+    .lb-list { display: flex; flex-direction: column; gap: 10px; }
+
+    .lb-row {
+      background: white; border: 1px solid var(--border);
+      border-radius: var(--radius-md); padding: 14px 16px;
+      display: flex; align-items: center; gap: 14px;
+      transition: box-shadow var(--transition);
+    }
+    .lb-row:hover { box-shadow: var(--shadow-sm); }
+    .lb-row.top1 { border-color: #f0c040; background: linear-gradient(135deg, #fffbf0, white); }
+    .lb-row.top2 { border-color: #c0c0c0; background: linear-gradient(135deg, #f8f8f8, white); }
+    .lb-row.top3 { border-color: #cd7f32; background: linear-gradient(135deg, #fff5ee, white); }
+    .lb-row.is-me { border-color: var(--green); background: var(--green-xlt); }
+
+    .lb-pos {
+      font-family: var(--font-disp); font-size: 1.1rem;
+      font-weight: 700; color: var(--ink-3);
+      width: 32px; text-align: center; flex-shrink: 0;
+    }
+    .lb-row.top1 .lb-pos { color: #c8a000; }
+    .lb-row.top2 .lb-pos { color: #888; }
+    .lb-row.top3 .lb-pos { color: #cd7f32; }
+
+    .lb-avatar {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: var(--green-lt);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; flex-shrink: 0; font-family: var(--font-en);
+      font-weight: 700; color: var(--green);
+    }
+    .lb-row.is-me .lb-avatar { background: var(--green); color: white; }
+
+    .lb-info { flex: 1; min-width: 0; }
+    .lb-name { font-size: 0.9rem; font-weight: 700; color: var(--ink); }
+    .lb-city { font-size: 0.75rem; color: var(--ink-3); }
+
+    .lb-streak {
+      text-align: center; flex-shrink: 0;
+    }
+    .lb-streak-num {
+      font-family: var(--font-disp); font-size: 1.3rem;
+      color: var(--green); font-weight: 700; display: block; line-height: 1;
+    }
+    .lb-streak-label { font-size: 0.65rem; color: var(--ink-3); font-family: var(--font-en); }
+
+    /* Medal emojis for top 3 */
+    .lb-medal { font-size: 1.2rem; flex-shrink: 0; }
+
+    /* ===== LOADING / EMPTY ===== */
+    .lb-loading {
+      text-align: center; padding: 48px 24px;
+      color: var(--ink-3); font-size: 0.9rem;
+    }
+    .lb-empty {
+      background: white; border: 1px solid var(--border);
+      border-radius: var(--radius-md); padding: 40px 24px;
+      text-align: center; color: var(--ink-3);
+    }
+
+    /* ===== PRIVACY NOTE ===== */
+    .privacy-note {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: var(--radius-md); padding: 14px 16px;
+      font-size: 0.78rem; color: var(--ink-3); line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .en-mode .lb-row { direction: ltr; }
+    .en-mode .my-rank-card { direction: ltr; }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav" id="mainNav">
+    <div class="nav-logo">سانس<span>•</span></div>
+    <div class="nav-right">
+      <a href="app.html" class="back-btn" id="backBtn">← ہوم</a>
+      <a href="settings.html" class="back-btn" style="padding:8px 10px;">⚙️</a>
+      <div class="lang-pill">
+        <button class="lang-btn active" id="btn-ur">اردو</button>
+        <button class="lang-btn" id="btn-en">English</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <div class="page-hero">
+    <div class="page-hero-inner">
+      <div class="page-badge" id="pageBadge">🏆 لیڈر بورڈ</div>
+      <h1 id="pageTitle">پاکستان کا سٹریک لیڈر بورڈ</h1>
+      <p id="pageSubtitle">سب سے زیادہ دن سگریٹ فری —익명 درجہ بندی</p>
+    </div>
+  </div>
+
+  <div class="lb-wrap">
+
+    <!-- My rank card -->
+    <div class="my-rank-card" id="myRankCard" style="display:none;">
+      <div class="mrc-inner">
+        <div class="mrc-rank" id="myRank">#—</div>
+        <div class="mrc-info">
+          <div class="mrc-name" id="myName">آپ</div>
+          <div class="mrc-days" id="myDays">0 دن</div>
+        </div>
+        <div class="mrc-badge" id="myBadge">🔥 0</div>
+      </div>
+    </div>
+
+    <!-- Privacy note -->
+    <div class="privacy-note" id="privacyNote">
+      🔒 <span id="privacyText">یہ لیڈر بورڈ مکمل طور پر익명 ہے۔ صرف آپ کا نام اور سٹریک ظاہر ہوتا ہے — کوئی ذاتی معلومات نہیں۔</span>
+    </div>
+
+    <!-- Filter tabs -->
+    <div class="lb-tabs" id="lbTabs"></div>
+
+    <!-- List -->
+    <div class="lb-list" id="lbList">
+      <div class="lb-loading" id="lbLoading">⏳ لوڈ ہو رہا ہے…</div>
+    </div>
+
+  </div>
+
+  <footer><p>© 2025 سانس · پاکستان کے لیے بنایا گیا ❤️</p></footer>
+
+  <script src="utils.js"></script>
+  <script src="firebase.js"></script>
+  <script>
+    const PG = {
+      ur: {
+        backBtn: "← ہوم", pageBadge: "🏆 لیڈر بورڈ",
+        pageTitle: "پاکستان کا سٹریک لیڈر بورڈ",
+        pageSubtitle: "سب سے زیادہ دن سگریٹ فری —익명 درجہ بندی",
+        privacyText: "🔒 یہ لیڈر بورڈ مکمل طور پر익명 ہے۔ صرف نام اور سٹریک ظاہر ہوتا ہے۔",
+        loading: "⏳ لوڈ ہو رہا ہے…",
+        empty: "ابھی کوئی ڈیٹا نہیں — پہلے اپنی پروفائل مکمل کریں۔",
+        tabs: [
+          { key:'streak', label:'🔥 سٹریک' },
+          { key:'days',   label:'📅 کل دن' },
+        ],
+        days: "دن", streak: "سٹریک",
+        youLabel: "آپ", yourRank: "آپ کا رینک",
+        myDaySuffix: " دن سگریٹ فری",
+      },
+      en: {
+        backBtn: "← Home", pageBadge: "🏆 Leaderboard",
+        pageTitle: "Pakistan Streak Leaderboard",
+        pageSubtitle: "Most days smoke-free — anonymous rankings",
+        privacyText: "🔒 This leaderboard is fully anonymous. Only your name and streak are shown.",
+        loading: "⏳ Loading…",
+        empty: "No data yet — complete your profile first.",
+        tabs: [
+          { key:'streak', label:'🔥 Streak' },
+          { key:'days',   label:'📅 Total Days' },
+        ],
+        days: "days", streak: "streak",
+        youLabel: "You", yourRank: "Your rank",
+        myDaySuffix: " days smoke-free",
+      },
+    };
+
+    let activeFilter = 'streak';
+    let currentLang  = 'ur';
+
+    /* ===== SYNC MY SCORE ===== */
+    async function syncMyScore() {
+      const name   = LS.get('userName', '');
+      const city   = LS.get('userCity', '');
+      const days   = getDaysSinceQuit();
+      const streak = getStreak();
+      if (!days) return;
+
+      // Use anonymous ID stored in localStorage
+      let uid = LS.get('lbUid', '');
+      if (!uid) {
+        uid = 'anon_' + Math.random().toString(36).substr(2,9);
+        LS.set('lbUid', uid);
+      }
+
+      const displayName = name
+        ? name[0].toUpperCase() + '***'
+        : 'مجہول';
+
+      onFirebaseReady(async () => {
+        try {
+          await _db.collection('leaderboard').doc(uid).set({
+            name:   displayName,
+            city:   city || '—',
+            days:   days,
+            streak: streak,
+            uid:    uid,
+            updatedAt: new Date().toISOString(),
+          }, { merge: true });
+        } catch(e) {
+          console.warn('Leaderboard sync failed:', e.message);
+        }
+      });
+    }
+
+    /* ===== LOAD LEADERBOARD ===== */
+    async function loadLeaderboard(lang) {
+      const listEl    = document.getElementById('lbList');
+      const loadingEl = document.getElementById('lbLoading');
+      const c         = PG[lang];
+
+      listEl.innerHTML = `<div class="lb-loading">${c.loading}</div>`;
+
+      onFirebaseReady(async () => {
+        try {
+          const field = activeFilter === 'streak' ? 'streak' : 'days';
+          const snap  = await _db.collection('leaderboard')
+            .orderBy(field, 'desc')
+            .limit(50)
+            .get();
+
+          if (snap.empty) {
+            listEl.innerHTML = `<div class="lb-empty">${c.empty}</div>`;
+            return;
+          }
+
+          const myUid  = LS.get('lbUid', '');
+          const medals = ['🥇','🥈','🥉'];
+          const rows   = [];
+          let myRankNum = null;
+
+          snap.docs.forEach((doc, i) => {
+            const d   = doc.data();
+            const pos = i + 1;
+            if (doc.id === myUid) myRankNum = pos;
+            rows.push({ ...d, pos, id: doc.id });
+          });
+
+          // Update my rank card
+          if (myRankNum) {
+            const myData = rows.find(r => r.id === myUid);
+            document.getElementById('myRankCard').style.display = 'flex';
+            document.getElementById('myRank').textContent  = '#' + myRankNum;
+            document.getElementById('myName').textContent  = myData.name;
+            document.getElementById('myDays').textContent  = myData.days + c.myDaySuffix;
+            document.getElementById('myBadge').textContent = '🔥 ' + myData.streak;
+          }
+
+          // Render list
+          listEl.innerHTML = '';
+          rows.forEach(row => {
+            const isMe   = row.id === myUid;
+            const isTop  = row.pos <= 3 ? 'top' + row.pos : '';
+            const div    = document.createElement('div');
+            div.className = `lb-row ${isTop} ${isMe ? 'is-me' : ''}`;
+            const initial = (row.name || '?')[0].toUpperCase();
+            const medal   = row.pos <= 3 ? medals[row.pos-1] : '';
+            div.innerHTML = `
+              <div class="lb-pos">${row.pos <= 3 ? '' : row.pos}</div>
+              ${medal ? `<div class="lb-medal">${medal}</div>` : ''}
+              <div class="lb-avatar">${initial}</div>
+              <div class="lb-info">
+                <div class="lb-name">${row.name}${isMe ? ' (' + c.youLabel + ')' : ''}</div>
+                <div class="lb-city">${row.city}</div>
+              </div>
+              <div class="lb-streak">
+                <span class="lb-streak-num">${activeFilter === 'streak' ? row.streak : row.days}</span>
+                <span class="lb-streak-label">${activeFilter === 'streak' ? c.streak : c.days}</span>
+              </div>
+            `;
+            listEl.appendChild(div);
+          });
+
+        } catch(e) {
+          listEl.innerHTML = `<div class="lb-empty">${c.empty}</div>`;
+          console.warn('Leaderboard load failed:', e.message);
+        }
+      });
+    }
+
+    /* ===== RENDER TABS ===== */
+    function renderTabs(lang) {
+      const wrap = document.getElementById('lbTabs');
+      wrap.innerHTML = '';
+      PG[lang].tabs.forEach(tab => {
+        const btn = document.createElement('button');
+        btn.className = 'lb-tab' + (activeFilter === tab.key ? ' active' : '');
+        btn.textContent = tab.label;
+        btn.addEventListener('click', () => {
+          activeFilter = tab.key;
+          renderTabs(lang);
+          loadLeaderboard(lang);
+        });
+        wrap.appendChild(btn);
+      });
+    }
+
+    /* ===== APPLY TRANSLATIONS ===== */
+    function applyTranslations(lang) {
+      currentLang = lang;
+      const c   = PG[lang];
+      const set = (id, val) => { const el = document.getElementById(id); if(el) el.textContent = val; };
+      set('backBtn', c.backBtn); set('pageBadge', c.pageBadge);
+      set('pageTitle', c.pageTitle); set('pageSubtitle', c.pageSubtitle);
+      set('privacyText', c.privacyText);
+      renderTabs(lang);
+      loadLeaderboard(lang);
+    }
+
+    /* ===== INIT ===== */
+    syncMyScore();
+    initNavScroll();
+    initReveal();
+    initLang(applyTranslations);
+  </script>
+  <script src="nav.js"></script>
+  <script src="chat.js"></script>
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("sw.js").catch(() => {});
+    }
+  </script>
+</body>
+</html>
