@@ -241,8 +241,7 @@ function buildShareMessage(lang, context) {
   const savings = getSavings();
   const cigs    = getCigsAvoided();
   const badges  = (LS.get('earnedBadges', []) || []).length;
-  const siteUrl = 'https://saans.app'; // update to your real URL
-
+  const siteUrl = 'https://mujtabaazhar051-sudo.github.io/Saans';
   if (lang === 'ur') {
     const greeting = name ? `میں ${name} ہوں اور` : 'میں';
     const msgs = {

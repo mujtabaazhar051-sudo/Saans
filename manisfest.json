@@ -2,7 +2,7 @@
   "name": "سانس — سگریٹ چھوڑیں",
   "short_name": "سانس",
   "description": "Pakistan's bilingual quit-smoking companion",
-  "start_url": "/saans/app.html",
+  "start_url": "/Saans/app.html",
   "display": "standalone",
   "background_color": "#0d3d26",
   "theme_color": "#1a7a4a",
