@@ -502,8 +502,9 @@
 
       // Wait for Firebase to be ready
       if (!_firebaseReady) {
-        showMsg(lang === 'ur' ? 'Firebase لوڈ ہو رہا ہے، دوبارہ کوشش کریں' : 'Firebase loading, please try again in a moment');
-        return;
+        setLoading('signupBtn', 'signupSpinner', true);
+        await new Promise(resolve => onFirebaseReady(resolve));
+        setLoading('signupBtn', 'signupSpinner', false);
       }
 
       setLoading('signupBtn', 'signupSpinner', true);
@@ -639,8 +640,12 @@
       applyTranslations('en');
     });
 
-    // Check if already logged in
+    // Show loading state while Firebase loads
+    document.getElementById('loginBtn').disabled  = true;
+    document.getElementById('signupBtn').disabled = true;
     onFirebaseReady(() => {
+      document.getElementById('loginBtn').disabled  = false;
+      document.getElementById('signupBtn').disabled = false;
       onAuthChange(user => {
         if (user) showLoggedIn(user);
       });
