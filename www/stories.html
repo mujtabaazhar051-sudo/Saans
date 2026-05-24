@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="سانس — کامیابی کی کہانیاں پڑھیں اور اپنی کہانی شیئر کریں۔" />
+  <title>سانس — کامیابی کی کہانیاں</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;600;700&family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+    .stories-wrap {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 40px 28px 80px;
+    }
+
+    /* ===== FEATURED STORY ===== */
+    .featured-card {
+      background: linear-gradient(135deg, #0d3d26 0%, #1a5e3a 60%, #0d6e5e 100%);
+      border-radius: var(--radius-lg);
+      padding: 36px 32px;
+      margin-bottom: 32px;
+      position: relative;
+      overflow: hidden;
+      color: white;
+    }
+    .featured-card::before {
+      content: "";
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    .featured-inner { position: relative; z-index: 1; }
+
+    .featured-label {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(255,255,255,.15);
+      border: 1px solid rgba(255,255,255,.2);
+      color: rgba(255,255,255,.9);
+      padding: 4px 14px; border-radius: 999px;
+      font-size: 0.75rem; font-family: var(--font-en);
+      letter-spacing: 0.05em; margin-bottom: 20px;
+    }
+    .featured-label .star { color: var(--accent); }
+
+    .featured-quote-mark {
+      font-size: 3.5rem; color: rgba(255,255,255,.15);
+      font-family: var(--font-disp); line-height: 1;
+      display: block; margin-bottom: -8px;
+    }
+    .featured-text {
+      font-family: var(--font-disp);
+      font-size: clamp(1.1rem, 3vw, 1.5rem);
+      color: white; line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    .featured-person {
+      display: flex; align-items: center; gap: 14px;
+    }
+    .featured-avatar {
+      width: 52px; height: 52px; border-radius: 50%;
+      background: rgba(255,255,255,.15);
+      border: 2px solid rgba(255,255,255,.3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; flex-shrink: 0;
+    }
+    .featured-meta {}
+    .featured-name  { font-size: 1rem; font-weight: 700; color: white; }
+    .featured-detail{ font-size: 0.8rem; color: rgba(255,255,255,.6); margin-top: 2px; }
+    .featured-badge {
+      margin-right: auto;
+      background: rgba(93,224,154,.2);
+      border: 1px solid rgba(93,224,154,.3);
+      color: #5de09a;
+      padding: 4px 12px; border-radius: 999px;
+      font-size: 0.75rem; font-weight: 600;
+      font-family: var(--font-en);
+    }
+    .en-mode .featured-badge { margin-right: 0; margin-left: auto; }
+
+    /* ===== FILTER CHIPS ===== */
+    .filter-row {
+      display: flex; gap: 8px; flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+    .chip {
+      border: 1px solid var(--border);
+      background: white; color: var(--ink-2);
+      padding: 6px 16px; border-radius: 999px;
+      font-size: 0.82rem; font-weight: 500;
+      cursor: pointer; font-family: inherit;
+      transition: all var(--transition);
+    }
+    .chip:hover { border-color: var(--green-mid); color: var(--green); background: var(--green-xlt); }
+    .chip.active { background: var(--green); color: white; border-color: var(--green); }
+
+    /* ===== STORIES GRID ===== */
+    .stories-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 18px;
+      margin-bottom: 48px;
+    }
+
+    .story-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 22px 20px;
+      position: relative; overflow: hidden;
+      transition: box-shadow var(--transition), transform var(--transition);
+      display: flex; flex-direction: column; gap: 14px;
+    }
+    .story-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+    .story-card::before {
+      content: "";
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--green), var(--teal));
+    }
+    .story-card.hidden { display: none; }
+
+    .story-top { display: flex; align-items: center; gap: 12px; }
+    .story-avatar {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--green-lt);
+      border: 2px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; flex-shrink: 0;
+    }
+    .story-person { flex: 1; min-width: 0; }
+    .story-name   { font-size: 0.92rem; font-weight: 700; color: var(--ink); }
+    .story-detail { font-size: 0.75rem; color: var(--ink-3); margin-top: 1px; }
+    .story-duration-badge {
+      font-size: 0.7rem; font-weight: 700;
+      padding: 3px 10px; border-radius: 999px;
+      white-space: nowrap; flex-shrink: 0;
+    }
+    .dur-week   { background: #e8f5ee; color: var(--green); }
+    .dur-month  { background: #e8f0ff; color: #3a5fc5; }
+    .dur-year   { background: #fff3e0; color: #b8760a; }
+
+    .story-text {
+      font-size: 0.88rem; color: var(--ink-2);
+      line-height: 1.7; flex: 1;
+    }
+    .story-quote-mark {
+      font-size: 1.8rem; color: var(--green-lt);
+      font-family: var(--font-disp); line-height: 1;
+      margin-bottom: -6px; display: block;
+    }
+
+    .story-footer {
+      display: flex; align-items: center;
+      justify-content: space-between; gap: 8px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+    }
+    .story-city { font-size: 0.75rem; color: var(--ink-3); display: flex; align-items: center; gap: 4px; }
+    .story-cigs { font-size: 0.75rem; color: var(--green); font-weight: 600; font-family: var(--font-en); }
+
+    /* No results */
+    .no-stories {
+      text-align: center; padding: 48px 20px;
+      color: var(--ink-3); display: none;
+      grid-column: 1 / -1;
+    }
+    .no-stories.show { display: block; }
+    .no-stories .ns-icon { font-size: 2.5rem; margin-bottom: 10px; display: block; }
+
+    /* ===== SUBMIT FORM ===== */
+    .submit-section {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+    .submit-header {
+      background: linear-gradient(135deg, var(--green-xlt), #edf7f2);
+      border-bottom: 1px solid #b8dfc8;
+      padding: 22px 24px;
+    }
+    .submit-header h3 {
+      font-family: var(--font-disp);
+      font-size: 1.2rem; color: var(--green); margin-bottom: 4px;
+    }
+    .submit-header p { font-size: 0.85rem; color: var(--ink-2); }
+
+    .submit-form { padding: 24px; display: flex; flex-direction: column; gap: 16px; }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-label { font-size: 0.82rem; font-weight: 600; color: var(--ink-2); }
+    .form-input, .form-select, .form-textarea {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      font-size: 0.9rem; font-family: inherit;
+      color: var(--ink); background: var(--bg);
+      transition: border-color var(--transition), box-shadow var(--transition);
+      outline: none; width: 100%;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(26,122,74,.1);
+      background: white;
+    }
+    .form-textarea { resize: vertical; min-height: 110px; line-height: 1.6; }
+    .form-select   { cursor: pointer; }
+
+    .char-count { font-size: 0.72rem; color: var(--ink-3); text-align: left; font-family: var(--font-en); }
+    .en-mode .char-count { text-align: right; }
+
+    .form-submit {
+      background: var(--green); color: white;
+      border: none; padding: 13px 32px;
+      border-radius: 999px; font-size: 0.95rem;
+      font-weight: 700; cursor: pointer;
+      font-family: inherit;
+      transition: background var(--transition), transform var(--transition);
+      align-self: flex-start;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .form-submit:hover { background: var(--teal); transform: translateY(-1px); }
+
+    .submit-success {
+      display: none;
+      background: var(--green-lt);
+      border-radius: var(--radius-md);
+      padding: 20px 18px;
+      text-align: center;
+      color: var(--green);
+    }
+    .submit-success.show { display: block; }
+    .submit-success .ss-icon { font-size: 2rem; display: block; margin-bottom: 8px; }
+    .submit-success h4 { font-size: 1rem; font-weight: 700; margin-bottom: 4px; }
+    .submit-success p  { font-size: 0.85rem; color: var(--ink-2); }
+
+    /* ===== BLOCK TITLE ===== */
+    .block-title {
+      font-family: var(--font-disp);
+      font-size: 1.15rem; color: var(--ink);
+      margin-bottom: 16px;
+      display: flex; align-items: center; gap: 8px;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 600px) {
+      .stories-wrap  { padding: 28px 16px 60px; }
+      .featured-card { padding: 24px 18px; }
+      .stories-grid  { grid-template-columns: 1fr; }
+      .form-row      { grid-template-columns: 1fr; }
+    }
+
+    .en-mode .featured-card  { direction: ltr; }
+    .en-mode .story-card     { direction: ltr; }
+    .en-mode .submit-form    { direction: ltr; }
+    .en-mode .submit-header  { direction: ltr; }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav" id="mainNav">
+    <div class="nav-logo">سانس<span>•</span></div>
+    <div class="nav-right">
+      <a href="app.html" class="back-btn" id="backBtn">← ہوم</a>
+      <a href="settings.html" class="back-btn" title="Settings" id="navSettings" style="padding:8px 10px;">⚙️</a>
+      <div class="lang-pill">
+        <button class="lang-btn active" id="btn-ur">اردو</button>
+        <button class="lang-btn" id="btn-en">English</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <div class="page-hero">
+    <div class="page-hero-inner">
+      <div class="page-badge" id="pageBadge">🎉 کامیابی کی کہانیاں</div>
+      <h1 id="pageTitle">انہوں نے کر دکھایا</h1>
+      <p id="pageSubtitle">پاکستان بھر کے لوگوں کی کہانیاں — آپ کے لیے حوصلہ افزائی</p>
+    </div>
+  </div>
+
+  <div class="stories-wrap">
+
+    <!-- Featured -->
+    <div class="featured-card" id="featuredCard">
+      <div class="featured-inner">
+        <div class="featured-label"><span class="star">★</span><span id="featuredLabel">نمایاں کہانی</span></div>
+        <span class="featured-quote-mark">"</span>
+        <p class="featured-text" id="featuredText"></p>
+        <div class="featured-person">
+          <div class="featured-avatar" id="featuredAvatar">👤</div>
+          <div class="featured-meta">
+            <div class="featured-name" id="featuredName"></div>
+            <div class="featured-detail" id="featuredDetail"></div>
+          </div>
+          <span class="featured-badge" id="featuredBadge"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filter chips -->
+    <div class="filter-row" id="filterRow"></div>
+
+    <!-- Stories grid -->
+    <div class="block-title"><span>📖</span><span id="storiesGridTitle">تمام کہانیاں</span></div>
+    <div class="stories-grid" id="storiesGrid">
+      <div class="no-stories" id="noStories">
+        <span class="ns-icon">🔍</span>
+        <span id="noStoriesText">کوئی کہانی نہیں ملی</span>
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <div class="block-title"><span>✍️</span><span id="submitTitle">اپنی کہانی شیئر کریں</span></div>
+    <div class="submit-section">
+      <div class="submit-header">
+        <h3 id="submitHeaderTitle">آپ کی کہانی کسی اور کو حوصلہ دے سکتی ہے</h3>
+        <p id="submitHeaderDesc">اپنا تجربہ شیئر کریں — نام اصلی یا فرضی، آپ کی مرضی</p>
+      </div>
+      <div class="submit-form" id="submitForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" id="lblName">نام (یا عرفی نام)</label>
+            <input type="text" class="form-input" id="inpName" maxlength="40">
+          </div>
+          <div class="form-group">
+            <label class="form-label" id="lblCity">شہر</label>
+            <input type="text" class="form-input" id="inpCity" maxlength="40">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" id="lblDur">آپ کتنے عرصے سے سگریٹ فری ہیں؟</label>
+            <select class="form-select" id="inpDur">
+              <option value="" id="durPlaceholder">منتخب کریں</option>
+              <option value="week"  id="durWeek">1 ہفتہ یا کم</option>
+              <option value="month" id="durMonth">1 ماہ یا زیادہ</option>
+              <option value="year"  id="durYear">1 سال یا زیادہ</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" id="lblYears">کتنے سال سگریٹ پیتے رہے؟</label>
+            <input type="number" class="form-input" id="inpYears" min="1" max="50" placeholder="5">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" id="lblStory">اپنی کہانی لکھیں</label>
+          <textarea class="form-textarea" id="inpStory" maxlength="400"></textarea>
+          <span class="char-count"><span id="charCount">0</span> / 400</span>
+        </div>
+        <button class="form-submit" id="submitBtn" onclick="submitStory()">
+          <span>✉️</span><span id="submitBtnLabel">کہانی بھیجیں</span>
+        </button>
+        <div class="submit-success" id="submitSuccess">
+          <span class="ss-icon">🎉</span>
+          <h4 id="ssTitle">شکریہ!</h4>
+          <p id="ssDesc">آپ کی کہانی موصول ہو گئی۔ آپ کا حوصلہ دوسروں کو بھی طاقت دے گا۔</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <p>© 2025 سانس · پاکستان کے لیے بنایا گیا ❤️</p>
+  </footer>
+
+  <script src="utils.js"></script>
+  <script>
+    /* ===== STORIES DATA ===== */
+    const STORIES = {
+      ur: {
+        featured: {
+          avatar: "👨",
+          name: "احمد رضا",
+          detail: "کراچی · 15 سال سگریٹ نوش",
+          badge: "2 سال سگریٹ فری 🏆",
+          dur: "year",
+          text: "میں نے 15 سال سگریٹ پی۔ ہر بار چھوڑنے کی کوشش کی اور ناکام ہوا۔ پھر میری بیٹی نے کہا 'ابو، میں نہیں چاہتی آپ بیمار ہوں۔' اس ایک جملے نے مجھے بدل دیا۔ آج دو سال ہو گئے — اور میں نے کبھی پیچھے مڑ کر نہیں دیکھا۔",
+        },
+        stories: [
+          { avatar:"👩", name:"ثنا محمود",    city:"لاہور",      detail:"8 سال سگریٹ نوش", dur:"year",  cigs:2920, text:"میں نے سوچا بھی نہیں تھا کہ میں چھوڑ سکتی ہوں۔ پہلے ہفتے بہت مشکل تھا لیکن سانس کی مشق نے بہت مدد کی۔ اب ایک سال سے زیادہ ہو گیا ہے۔" },
+          { avatar:"👨", name:"عمر شیخ",      city:"اسلام آباد", detail:"5 سال سگریٹ نوش", dur:"month", cigs:600,  text:"میں نے ڈاکٹر کے کہنے پر چھوڑا۔ نکوٹین گم نے پہلے ماہ میں بہت سہارا دیا۔ اب 3 ماہ ہو گئے اور سانس بہتر ہے۔" },
+          { avatar:"👴", name:"غلام نبی",     city:"پشاور",      detail:"25 سال سگریٹ نوش", dur:"year",  cigs:9125, text:"25 سال بعد چھوڑنا ناممکن لگتا تھا۔ لیکن دل کا معائنہ کروایا تو ڈاکٹر نے ڈرا دیا۔ اب ڈیڑھ سال ہو گئے — جسم حیرت انگیز طور پر ٹھیک ہو گیا۔" },
+          { avatar:"👩", name:"نادیہ قریشی",  city:"ملتان",      detail:"10 سال سگریٹ نوش", dur:"month", cigs:300,  text:"چھوڑنے کے پہلے مہینے میں craving بہت آئی۔ لیکن ہر بار میں نے پانی پیا اور چلنے لگی۔ ابھی دو ماہ ہوئے ہیں — خوشبو واپس آ گئی ہے۔" },
+          { avatar:"👨", name:"طارق جمیل",    city:"فیصل آباد",  detail:"12 سال سگریٹ نوش", dur:"week",  cigs:70,   text:"ابھی صرف 10 دن ہوئے ہیں لیکن یہ میری زندگی کے بہترین 10 دن ہیں۔ بیجز دیکھ کر حوصلہ ملتا ہے۔ آگے بڑھتا رہوں گا۔" },
+          { avatar:"👩", name:"رخسانہ بیگم",  city:"حیدرآباد",   detail:"7 سال سگریٹ نوش", dur:"year",  cigs:5110, text:"بچوں کی خاطر چھوڑا۔ ایک سال تک بہت مشکل رہی لیکن روزانہ حوصلہ افزا پیغامات پڑھتی رہی۔ اب ڈیڑھ سال بعد مجھے اپنے آپ پر فخر ہے۔" },
+          { avatar:"👨", name:"بلال اختر",    city:"کوئٹہ",      detail:"6 سال سگریٹ نوش", dur:"month", cigs:180,  text:"6 مہینے ہو گئے ہیں۔ جب بھی خواہش ہوئی سانس کی مشق نے بچا لیا۔ PKR 21,000 بچ گئے — نئی کتابیں خریدیں۔" },
+          { avatar:"👩", name:"عائشہ ملک",    city:"راولپنڈی",   detail:"3 سال سگریٹ نوش", dur:"week",  cigs:21,   text:"ابھی صرف 3 ہفتے ہیں لیکن پہلے ہی بہتر محسوس کر رہی ہوں۔ سونگھنے کی حس واپس آ گئی ہے۔" },
+        ],
+      },
+      en: {
+        featured: {
+          avatar: "👨",
+          name: "Ahmed Raza",
+          detail: "Karachi · Smoked for 15 years",
+          badge: "2 Years Smoke-Free 🏆",
+          dur: "year",
+          text: "I smoked for 15 years and failed every time I tried to quit. Then my daughter said, 'Baba, I don't want you to get sick.' That one sentence changed everything. It has been two years now — and I have never looked back.",
+        },
+        stories: [
+          { avatar:"👩", name:"Sana Mahmood",    city:"Lahore",       detail:"Smoked 8 years",  dur:"year",  cigs:2920, text:"I never thought I could actually quit. The first week was brutal but the breathing exercise helped enormously. It has now been over a year." },
+          { avatar:"👨", name:"Umar Sheikh",      city:"Islamabad",    detail:"Smoked 5 years",  dur:"month", cigs:600,  text:"I quit on my doctor's advice. Nicotine gum was a lifesaver in the first month. It has been 3 months and my breathing is already much better." },
+          { avatar:"👴", name:"Ghulam Nabi",      city:"Peshawar",     detail:"Smoked 25 years", dur:"year",  cigs:9125, text:"After 25 years quitting felt impossible. A cardiac checkup scared me into action. Now 18 months later — my body has recovered in ways I did not expect." },
+          { avatar:"👩", name:"Nadia Qureshi",    city:"Multan",       detail:"Smoked 10 years", dur:"month", cigs:300,  text:"Cravings were intense in the first month. Every time I felt one I drank water and went for a walk. Two months in now — my sense of smell has returned." },
+          { avatar:"👨", name:"Tariq Jameel",     city:"Faisalabad",   detail:"Smoked 12 years", dur:"week",  cigs:70,   text:"Only 10 days in but these have been the best 10 days of my life. Seeing the badges keeps me motivated. I will keep going." },
+          { avatar:"👩", name:"Rukhsana Begum",   city:"Hyderabad",    detail:"Smoked 7 years",  dur:"year",  cigs:5110, text:"I quit for my children. The first year was hard but reading the daily quotes kept me going. A year and a half on — I am proud of myself." },
+          { avatar:"👨", name:"Bilal Akhtar",     city:"Quetta",       detail:"Smoked 6 years",  dur:"month", cigs:180,  text:"Six months now. Every time I felt a craving the breathing exercise saved me. PKR 21,000 saved — I bought new books." },
+          { avatar:"👩", name:"Ayesha Malik",     city:"Rawalpindi",   detail:"Smoked 3 years",  dur:"week",  cigs:21,   text:"Only 3 weeks in but I already feel different. My sense of smell is coming back and I can breathe more easily." },
+        ],
+      },
+    };
+
+    /* ===== STATE ===== */
+    let activeFilter = 'all';
+    let currentLang  = 'ur';
+
+    /* ===== RENDER FEATURED ===== */
+    function renderFeatured(lang) {
+      const f = STORIES[lang].featured;
+      document.getElementById('featuredAvatar').textContent = f.avatar;
+      document.getElementById('featuredName').textContent   = f.name;
+      document.getElementById('featuredDetail').textContent = f.detail;
+      document.getElementById('featuredBadge').textContent  = f.badge;
+      document.getElementById('featuredText').textContent   = f.text;
+    }
+
+    /* ===== RENDER CHIPS ===== */
+    function renderChips(lang) {
+      const c    = PG[lang];
+      const row  = document.getElementById('filterRow');
+      row.innerHTML = '';
+      c.filters.forEach(f => {
+        const chip = document.createElement('button');
+        chip.className = 'chip' + (activeFilter === f.key ? ' active' : '');
+        chip.textContent = f.label;
+        chip.addEventListener('click', () => {
+          activeFilter = f.key;
+          renderChips(lang);
+          renderStories(lang);
+        });
+        row.appendChild(chip);
+      });
+    }
+
+    /* ===== RENDER STORIES ===== */
+    function renderStories(lang) {
+      const c    = PG[lang];
+      const grid = document.getElementById('storiesGrid');
+      grid.querySelectorAll('.story-card').forEach(el => el.remove());
+
+      const durClsMap = { week:'dur-week', month:'dur-month', year:'dur-year' };
+      let visible = 0;
+
+      STORIES[lang].stories.forEach(s => {
+        const show = activeFilter === 'all' || s.dur === activeFilter;
+        const durLabel = c.durLabels[s.dur] || s.dur;
+        const card = document.createElement('div');
+        card.className = 'story-card' + (show ? '' : ' hidden');
+
+        card.innerHTML = `
+          <div class="story-top">
+            <div class="story-avatar">${s.avatar}</div>
+            <div class="story-person">
+              <div class="story-name">${s.name}</div>
+              <div class="story-detail">${s.detail}</div>
+            </div>
+            <span class="story-duration-badge ${durClsMap[s.dur]}">${durLabel}</span>
+          </div>
+          <div class="story-text">
+            <span class="story-quote-mark">"</span>
+            ${s.text}
+          </div>
+          <div class="story-footer">
+            <span class="story-city">📍 ${s.city}</span>
+            <span class="story-cigs">🚬 −${s.cigs.toLocaleString()}</span>
+          </div>
+        `;
+        grid.appendChild(card);
+        if (show) visible++;
+      });
+
+      // User-submitted stories
+      const submitted = LS.get('userStories', []);
+      submitted.forEach(s => {
+        const show = activeFilter === 'all' || s.dur === activeFilter;
+        const durLabel = c.durLabels[s.dur] || s.dur;
+        const card = document.createElement('div');
+        card.className = 'story-card' + (show ? '' : ' hidden');
+        card.innerHTML = `
+          <div class="story-top">
+            <div class="story-avatar">👤</div>
+            <div class="story-person">
+              <div class="story-name">${s.name}</div>
+              <div class="story-detail">${s.detail}</div>
+            </div>
+            <span class="story-duration-badge ${durClsMap[s.dur] || 'dur-week'}">${durLabel}</span>
+          </div>
+          <div class="story-text">
+            <span class="story-quote-mark">"</span>
+            ${s.text}
+          </div>
+          <div class="story-footer">
+            <span class="story-city">📍 ${s.city || '—'}</span>
+            <span class="story-cigs" style="color:var(--accent);">✍️ ${c.userSubmitted}</span>
+          </div>
+        `;
+        grid.appendChild(card);
+        if (show) visible++;
+      });
+
+      const noEl = document.getElementById('noStories');
+      noEl.classList.toggle('show', visible === 0);
+    }
+
+    /* ===== CHAR COUNT ===== */
+    document.getElementById('inpStory').addEventListener('input', function() {
+      document.getElementById('charCount').textContent = this.value.length;
+    });
+
+    /* ===== SUBMIT ===== */
+    function submitStory() {
+      const lang  = document.body.classList.contains('en-mode') ? 'en' : 'ur';
+      const c     = PG[lang];
+      const name  = document.getElementById('inpName').value.trim();
+      const city  = document.getElementById('inpCity').value.trim();
+      const dur   = document.getElementById('inpDur').value;
+      const years = document.getElementById('inpYears').value.trim();
+      const text  = document.getElementById('inpStory').value.trim();
+
+      if (!name || !dur || !text) {
+        showToast(lang === 'ur' ? '⚠️ نام، مدت اور کہانی ضروری ہے' : '⚠️ Name, duration and story are required');
+        return;
+      }
+      if (text.length < 20) {
+        showToast(lang === 'ur' ? '⚠️ کہانی تھوڑی لمبی لکھیں' : '⚠️ Please write a bit more');
+        return;
+      }
+
+      const detail = years
+        ? (lang === 'ur' ? `${years} سال سگریٹ نوش` : `Smoked ${years} years`)
+        : '';
+
+      const stories = LS.get('userStories', []);
+      stories.unshift({ name, city, dur, detail, text, lang });
+      LS.set('userStories', stories);
+
+      // Show success
+      document.getElementById('submitForm').querySelectorAll('input,select,textarea,button').forEach(el => el.disabled = true);
+      document.getElementById('submitSuccess').classList.add('show');
+      showToast(lang === 'ur' ? '🎉 کہانی شامل ہو گئی!' : '🎉 Story added!');
+      renderStories(lang);
+    }
+
+    /* ===== TRANSLATIONS ===== */
+    const PG = {
+      ur: {
+        backBtn: "← ہوم",
+        pageBadge: "🎉 کامیابی کی کہانیاں",
+        pageTitle: "انہوں نے کر دکھایا",
+        pageSubtitle: "پاکستان بھر کے لوگوں کی کہانیاں — آپ کے لیے حوصلہ افزائی",
+        featuredLabel: "نمایاں کہانی",
+        storiesGridTitle: "تمام کہانیاں",
+        submitTitle: "اپنی کہانی شیئر کریں",
+        submitHeaderTitle: "آپ کی کہانی کسی اور کو حوصلہ دے سکتی ہے",
+        submitHeaderDesc: "اپنا تجربہ شیئر کریں — نام اصلی یا فرضی، آپ کی مرضی",
+        lblName: "نام (یا عرفی نام)",
+        lblCity: "شہر",
+        lblDur: "آپ کتنے عرصے سے سگریٹ فری ہیں؟",
+        durPlaceholder: "منتخب کریں",
+        durWeek: "1 ہفتہ یا کم",
+        durMonth: "1 ماہ یا زیادہ",
+        durYear: "1 سال یا زیادہ",
+        lblYears: "کتنے سال سگریٹ پیتے رہے؟",
+        lblStory: "اپنی کہانی لکھیں",
+        submitBtnLabel: "کہانی بھیجیں",
+        ssTitle: "شکریہ!",
+        ssDesc: "آپ کی کہانی موصول ہو گئی۔ آپ کا حوصلہ دوسروں کو بھی طاقت دے گا۔",
+        noStoriesText: "کوئی کہانی نہیں ملی",
+        userSubmitted: "آپ کی کہانی",
+        filters: [
+          { key:'all',   label:'سب' },
+          { key:'week',  label:'1 ہفتہ' },
+          { key:'month', label:'1 ماہ' },
+          { key:'year',  label:'1 سال+' },
+        ],
+        durLabels: { week:'1 ہفتہ', month:'1 ماہ+', year:'1 سال+' },
+      },
+      en: {
+        backBtn: "← Home",
+        pageBadge: "🎉 Success Stories",
+        pageTitle: "They Did It",
+        pageSubtitle: "Stories from across Pakistan — inspiration for your journey",
+        featuredLabel: "Featured Story",
+        storiesGridTitle: "All Stories",
+        submitTitle: "Share Your Story",
+        submitHeaderTitle: "Your story could inspire someone else",
+        submitHeaderDesc: "Share your experience — use your real name or a nickname, your choice",
+        lblName: "Name (or nickname)",
+        lblCity: "City",
+        lblDur: "How long have you been smoke-free?",
+        durPlaceholder: "Select",
+        durWeek: "1 week or less",
+        durMonth: "1 month or more",
+        durYear: "1 year or more",
+        lblYears: "How many years did you smoke?",
+        lblStory: "Write your story",
+        submitBtnLabel: "Submit Story",
+        ssTitle: "Thank you!",
+        ssDesc: "Your story has been received. Your courage will inspire others.",
+        noStoriesText: "No stories found",
+        userSubmitted: "Your story",
+        filters: [
+          { key:'all',   label:'All' },
+          { key:'week',  label:'1 Week' },
+          { key:'month', label:'1 Month' },
+          { key:'year',  label:'1 Year+' },
+        ],
+        durLabels: { week:'1 Week', month:'1 Month+', year:'1 Year+' },
+      },
+    };
+
+    /* ===== APPLY TRANSLATIONS ===== */
+    function applyTranslations(lang) {
+      currentLang = lang;
+      const c   = PG[lang];
+      const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+
+      set('backBtn', c.backBtn);
+      set('pageBadge', c.pageBadge);
+      set('pageTitle', c.pageTitle);
+      set('pageSubtitle', c.pageSubtitle);
+      set('featuredLabel', c.featuredLabel);
+      set('storiesGridTitle', c.storiesGridTitle);
+      set('submitTitle', c.submitTitle);
+      set('submitHeaderTitle', c.submitHeaderTitle);
+      set('submitHeaderDesc', c.submitHeaderDesc);
+      set('lblName', c.lblName);
+      set('lblCity', c.lblCity);
+      set('lblDur', c.lblDur);
+      set('durPlaceholder', c.durPlaceholder);
+      set('durWeek', c.durWeek);
+      set('durMonth', c.durMonth);
+      set('durYear', c.durYear);
+      set('lblYears', c.lblYears);
+      set('lblStory', c.lblStory);
+      set('submitBtnLabel', c.submitBtnLabel);
+      set('ssTitle', c.ssTitle);
+      set('ssDesc', c.ssDesc);
+      set('noStoriesText', c.noStoriesText);
+
+      activeFilter = 'all';
+      renderFeatured(lang);
+      renderChips(lang);
+      renderStories(lang);
+    }
+
+    /* ===== INIT ===== */
+    initNavScroll();
+    initReveal();
+    initLang(applyTranslations);
+  </script>
+  <script src="chat.js"></script>
+</body>
+</html>

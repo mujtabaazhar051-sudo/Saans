@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="سانس — اپنی کامیابیوں کے بیجز دیکھیں۔" />
+  <title>سانس — بیجز</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;600;700&family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+    .badges-wrap {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 40px 28px 80px;
+    }
+
+    /* ===== SUMMARY BAR ===== */
+    .summary-bar {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 36px;
+    }
+    .sb-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 18px 14px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .sb-card::before {
+      content: "";
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--green), var(--teal));
+    }
+    .sb-num {
+      font-family: var(--font-disp);
+      font-size: 2rem; color: var(--green);
+      font-weight: 700; line-height: 1;
+      display: block; margin-bottom: 4px;
+    }
+    .sb-label { font-size: 0.78rem; color: var(--ink-3); line-height: 1.3; }
+
+    /* ===== BLOCK TITLE ===== */
+    .block-title {
+      font-family: var(--font-disp);
+      font-size: 1.15rem; color: var(--ink);
+      margin-bottom: 16px;
+      display: flex; align-items: center; gap: 8px;
+    }
+
+    /* ===== BADGES GRID ===== */
+    .badges-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 14px;
+      margin-bottom: 40px;
+    }
+
+    /* ===== BADGE CARD ===== */
+    .badge-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 22px 14px 18px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      transition: box-shadow var(--transition), transform var(--transition);
+      cursor: default;
+    }
+
+    /* Earned */
+    .badge-card.earned {
+      border-color: var(--green-mid);
+      background: linear-gradient(160deg, #f3faf6 0%, white 100%);
+    }
+    .badge-card.earned:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+    }
+    .badge-card.earned::before {
+      content: "";
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--green), var(--teal));
+    }
+
+    /* Locked */
+    .badge-card.locked {
+      background: #f9f9f9;
+      border-color: #e8e8e8;
+      opacity: 0.6;
+      filter: grayscale(0.7);
+    }
+
+    /* New badge pop animation */
+    @keyframes badgePop {
+      0%   { transform: scale(0.5); opacity: 0; }
+      70%  { transform: scale(1.12); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .badge-card.just-earned {
+      animation: badgePop 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
+    }
+
+    .badge-icon {
+      font-size: 2.6rem;
+      display: block;
+      margin-bottom: 10px;
+      line-height: 1;
+      transition: filter 0.3s ease;
+    }
+    .badge-card.locked .badge-icon { filter: grayscale(1); }
+
+    .badge-name {
+      font-size: 0.82rem; font-weight: 700;
+      color: var(--ink); margin-bottom: 4px;
+      line-height: 1.3;
+    }
+    .badge-card.locked .badge-name { color: var(--ink-3); }
+
+    .badge-desc {
+      font-size: 0.72rem; color: var(--ink-3);
+      line-height: 1.45; margin-bottom: 8px;
+    }
+
+    /* Earned checkmark */
+    .badge-earned-tag {
+      display: inline-block;
+      background: var(--green-lt);
+      color: var(--green);
+      font-size: 0.68rem; font-weight: 700;
+      padding: 2px 10px; border-radius: 999px;
+      font-family: var(--font-en);
+    }
+    /* Locked tag */
+    .badge-locked-tag {
+      display: inline-block;
+      background: var(--bg);
+      color: var(--ink-3);
+      font-size: 0.68rem; font-weight: 600;
+      padding: 2px 10px; border-radius: 999px;
+      font-family: var(--font-en);
+    }
+
+    /* ===== CONFETTI BURST (CSS only, pure emoji) ===== */
+    .confetti-wrap {
+      position: fixed; inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      display: none;
+    }
+    .confetti-wrap.show { display: block; }
+    .confetti-piece {
+      position: absolute;
+      font-size: 1.4rem;
+      animation: confettiFall 1.8s ease-in forwards;
+    }
+    @keyframes confettiFall {
+      0%   { opacity: 1; transform: translateY(-20px) rotate(0deg) scale(1); }
+      100% { opacity: 0; transform: translateY(100vh) rotate(720deg) scale(0.5); }
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 600px) {
+      .badges-wrap  { padding: 28px 16px 60px; }
+      .summary-bar  { grid-template-columns: repeat(3, 1fr); }
+      .badges-grid  { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 400px) {
+      .badges-grid  { grid-template-columns: repeat(2, 1fr); }
+      .summary-bar  { grid-template-columns: 1fr; }
+    }
+
+    /* ===== WHATSAPP SHARE ===== */
+    .wa-share-card {
+      background: linear-gradient(135deg, #25D366, #128C7E);
+      border-radius: var(--radius-lg);
+      padding: 20px 22px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 28px;
+      color: white;
+      flex-wrap: wrap;
+    }
+    .wa-icon { font-size: 2rem; flex-shrink: 0; }
+    .wa-text { flex: 1; min-width: 160px; }
+    .wa-text strong { display: block; font-size: 0.95rem; margin-bottom: 2px; }
+    .wa-text span   { font-size: 0.8rem; color: rgba(255,255,255,.75); }
+    .wa-btn {
+      background: white;
+      color: #128C7E;
+      border: none;
+      padding: 10px 22px;
+      border-radius: 999px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      display: flex; align-items: center; gap: 7px;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+    .wa-btn:hover { background: #f0fff4; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,.15); }
+    .en-mode .wa-share-card { direction: ltr; }
+
+  </style>
+</head>
+<body>
+
+  <!-- Confetti container -->
+  <div class="confetti-wrap" id="confettiWrap"></div>
+
+  <!-- NAV -->
+  <nav class="nav" id="mainNav">
+    <div class="nav-logo">سانس<span>•</span></div>
+    <div class="nav-right">
+      <a href="app.html" class="back-btn" id="backBtn">← ہوم</a>
+      <a href="settings.html" class="back-btn" title="Settings" id="navSettings" style="padding:8px 10px;">⚙️</a>
+      <div class="lang-pill">
+        <button class="lang-btn active" id="btn-ur">اردو</button>
+        <button class="lang-btn" id="btn-en">English</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <div class="page-hero">
+    <div class="page-hero-inner">
+      <div class="page-badge" id="pageBadge">🏅 بیجز</div>
+      <h1 id="pageTitle">آپ کی کامیابیاں</h1>
+      <p id="pageSubtitle">ہر قدم پر ایک نیا بیج — آپ کی محنت کا اعتراف</p>
+    </div>
+  </div>
+
+  <div class="badges-wrap">
+
+    <!-- WhatsApp Share -->
+    <div class="wa-share-card">
+      <div class="wa-icon">🏅</div>
+      <div class="wa-text">
+        <strong id="waTitle">اپنے بیجز شیئر کریں</strong>
+        <span id="waSub">دوستوں کو دکھائیں آپ نے کیا حاصل کیا</span>
+      </div>
+      <button class="wa-btn" id="waBtn" onclick="doShare()">
+        <span>WhatsApp</span><span>↗</span>
+      </button>
+    </div>
+
+        <!-- Summary -->
+    <div class="summary-bar">
+      <div class="sb-card">
+        <span class="sb-num" id="sbEarned">0</span>
+        <span class="sb-label" id="sbEarnedLabel">بیجز حاصل کیے</span>
+      </div>
+      <div class="sb-card">
+        <span class="sb-num" id="sbTotal">0</span>
+        <span class="sb-label" id="sbTotalLabel">کل بیجز</span>
+      </div>
+      <div class="sb-card">
+        <span class="sb-num" id="sbDays">0</span>
+        <span class="sb-label" id="sbDaysLabel">دن سگریٹ فری</span>
+      </div>
+    </div>
+
+    <!-- Time badges -->
+    <div class="block-title"><span>⏱️</span><span id="timeBadgesTitle">وقت کی کامیابیاں</span></div>
+    <div class="badges-grid" id="timeBadgesGrid"></div>
+
+    <!-- Milestone badges -->
+    <div class="block-title"><span>🎯</span><span id="milestoneBadgesTitle">سنگ میل</span></div>
+    <div class="badges-grid" id="milestoneBadgesGrid"></div>
+
+    <!-- Streak badges -->
+    <div class="block-title"><span>🔥</span><span id="streakBadgesTitle">سٹریک بیجز</span></div>
+    <div class="badges-grid" id="streakBadgesGrid"></div>
+
+  </div>
+
+  <footer>
+    <p>© 2025 سانس · پاکستان کے لیے بنایا گیا ❤️</p>
+  </footer>
+
+  <script src="utils.js"></script>
+  <script>
+    /* ===== BADGE DEFINITIONS ===== */
+    const BADGES = {
+      time: [
+        { id:'t1',  icon:'🌱', days:1   },
+        { id:'t2',  icon:'🌿', days:3   },
+        { id:'t3',  icon:'⭐', days:7   },
+        { id:'t4',  icon:'🌟', days:14  },
+        { id:'t5',  icon:'🏆', days:30  },
+        { id:'t6',  icon:'💎', days:60  },
+        { id:'t7',  icon:'👑', days:90  },
+        { id:'t8',  icon:'🦅', days:180 },
+        { id:'t9',  icon:'🚀', days:365 },
+      ],
+      milestone: [
+        { id:'m1',  icon:'🚬', type:'cigs',    threshold:10    },
+        { id:'m2',  icon:'💨', type:'cigs',    threshold:50    },
+        { id:'m3',  icon:'🫁', type:'cigs',    threshold:100   },
+        { id:'m4',  icon:'🌬️', type:'cigs',    threshold:500   },
+        { id:'m5',  icon:'🌀', type:'cigs',    threshold:1000  },
+        { id:'m6',  icon:'💰', type:'savings', threshold:500   },
+        { id:'m7',  icon:'💵', type:'savings', threshold:2000  },
+        { id:'m8',  icon:'💳', type:'savings', threshold:10000 },
+        { id:'m9',  icon:'🏦', type:'savings', threshold:50000 },
+      ],
+      streak: [
+        { id:'s1',  icon:'🔥', streak:3  },
+        { id:'s2',  icon:'⚡', streak:7  },
+        { id:'s3',  icon:'💪', streak:14 },
+        { id:'s4',  icon:'🛡️', streak:21 },
+        { id:'s5',  icon:'🌈', streak:30 },
+      ],
+    };
+
+    /* ===== TRANSLATIONS ===== */
+    const PG = {
+      ur: {
+        backBtn: "← ہوم",
+        pageBadge: "🏅 بیجز",
+        pageTitle: "آپ کی کامیابیاں",
+        pageSubtitle: "ہر قدم پر ایک نیا بیج — آپ کی محنت کا اعتراف",
+        sbEarnedLabel: "بیجز حاصل کیے",
+        waTitle: "اپنے بیجز شیئر کریں",
+        waSub: "دوستوں کو دکھائیں آپ نے کیا حاصل کیا",
+        waBtn: "WhatsApp ↗",
+        sbTotalLabel: "کل بیجز",
+        sbDaysLabel: "دن سگریٹ فری",
+        timeBadgesTitle: "وقت کی کامیابیاں",
+        milestoneBadgesTitle: "سنگ میل",
+        streakBadgesTitle: "سٹریک بیجز",
+        earnedTag: "✓ حاصل",
+        lockedTag: "🔒 مقفل",
+        newBadgeToast: "🎉 نیا بیج حاصل ہوا!",
+        time: [
+          { name:"پہلا دن",       desc:"سگریٹ چھوڑے 1 دن ہو گیا"       },
+          { name:"3 دن",          desc:"تین دن مکمل — شاباش!"            },
+          { name:"پہلا ہفتہ",     desc:"7 دن — آپ مضبوط ہیں"            },
+          { name:"دو ہفتے",       desc:"14 دن — ناقابلِ یقین!"           },
+          { name:"پہلا مہینہ",    desc:"30 دن — بہت بڑی کامیابی"        },
+          { name:"دو مہینے",      desc:"60 دن — آپ کے پھیپھڑے خوش ہیں" },
+          { name:"تین مہینے",     desc:"90 دن — حقیقی آزادی"            },
+          { name:"چھ مہینے",      desc:"180 دن — آپ ہیرو ہیں"           },
+          { name:"ایک سال",       desc:"365 دن — زندگی کا بہترین فیصلہ" },
+        ],
+        milestone: [
+          { name:"10 سگریٹ",      desc:"10 سگریٹ نہیں پیے"              },
+          { name:"50 سگریٹ",      desc:"50 سگریٹ سے بچے"                },
+          { name:"100 سگریٹ",     desc:"100 سگریٹ نہیں پیے"             },
+          { name:"500 سگریٹ",     desc:"500 سگریٹ بچائے!"               },
+          { name:"1000 سگریٹ",    desc:"ہزار سگریٹ نہیں پیے"           },
+          { name:"PKR 500 بچت",   desc:"پانچ سو روپے بچائے"             },
+          { name:"PKR 2,000 بچت", desc:"دو ہزار روپے بچائے"            },
+          { name:"PKR 10,000 بچت",desc:"دس ہزار روپے بچائے"            },
+          { name:"PKR 50,000 بچت",desc:"پچاس ہزار روپے بچائے!"         },
+        ],
+        streak: [
+          { name:"3 دن سٹریک",    desc:"3 دن لگاتار چیک‑ان"             },
+          { name:"7 دن سٹریک",    desc:"پورا ہفتہ لگاتار"               },
+          { name:"14 دن سٹریک",   desc:"دو ہفتے لگاتار"                 },
+          { name:"21 دن سٹریک",   desc:"تین ہفتے — عادت بن گئی!"        },
+          { name:"30 دن سٹریک",   desc:"پورا مہینہ لگاتار — کمال!"      },
+        ],
+      },
+      en: {
+        backBtn: "← Home",
+        pageBadge: "🏅 Badges",
+        pageTitle: "Your Achievements",
+        pageSubtitle: "A new badge at every milestone — recognition for your hard work",
+        sbEarnedLabel: "Badges Earned",
+        waTitle: "Share Your Badges",
+        waSub: "Show friends what you've achieved",
+        waBtn: "WhatsApp ↗",
+        sbTotalLabel: "Total Badges",
+        sbDaysLabel: "Days Smoke-Free",
+        timeBadgesTitle: "Time Milestones",
+        milestoneBadgesTitle: "Milestones",
+        streakBadgesTitle: "Streak Badges",
+        earnedTag: "✓ Earned",
+        lockedTag: "🔒 Locked",
+        newBadgeToast: "🎉 New badge earned!",
+        time: [
+          { name:"First Day",       desc:"1 day smoke-free"                },
+          { name:"3 Days",          desc:"Three days complete — well done!" },
+          { name:"One Week",        desc:"7 days — you are strong"         },
+          { name:"Two Weeks",       desc:"14 days — incredible!"           },
+          { name:"One Month",       desc:"30 days — a massive achievement" },
+          { name:"Two Months",      desc:"60 days — your lungs are happy"  },
+          { name:"Three Months",    desc:"90 days — real freedom"          },
+          { name:"Six Months",      desc:"180 days — you are a hero"       },
+          { name:"One Year",        desc:"365 days — best decision of your life" },
+        ],
+        milestone: [
+          { name:"10 Cigarettes",   desc:"Avoided 10 cigarettes"           },
+          { name:"50 Cigarettes",   desc:"50 cigarettes not smoked"        },
+          { name:"100 Cigarettes",  desc:"100 cigarettes avoided"          },
+          { name:"500 Cigarettes",  desc:"500 cigarettes saved!"           },
+          { name:"1,000 Cigarettes",desc:"One thousand cigarettes avoided" },
+          { name:"PKR 500 Saved",   desc:"Five hundred rupees saved"       },
+          { name:"PKR 2,000 Saved", desc:"Two thousand rupees saved"       },
+          { name:"PKR 10,000 Saved",desc:"Ten thousand rupees saved"       },
+          { name:"PKR 50,000 Saved",desc:"Fifty thousand rupees saved!"    },
+        ],
+        streak: [
+          { name:"3-Day Streak",    desc:"3 consecutive check-ins"         },
+          { name:"7-Day Streak",    desc:"Full week in a row"              },
+          { name:"14-Day Streak",   desc:"Two weeks straight"              },
+          { name:"21-Day Streak",   desc:"Three weeks — it's a habit now!" },
+          { name:"30-Day Streak",   desc:"Full month streak — amazing!"    },
+        ],
+      },
+    };
+
+    /* ===== CHECK EARNED ===== */
+    function getEarnedIds() {
+      return LS.get('earnedBadges', []);
+    }
+    function markEarned(id) {
+      const earned = getEarnedIds();
+      if (!earned.includes(id)) {
+        earned.push(id);
+        LS.set('earnedBadges', earned);
+        return true; // newly earned
+      }
+      return false;
+    }
+
+    function evaluateBadges() {
+      const days    = getDaysSinceQuit();
+      const streak  = getStreak();
+      const cigs    = getCigsAvoided();
+      const savings = getSavings();
+      const newOnes = [];
+
+      BADGES.time.forEach(b => {
+        if (days >= b.days) { if (markEarned(b.id)) newOnes.push(b.id); }
+      });
+      BADGES.milestone.forEach(b => {
+        const val = b.type === 'cigs' ? cigs : savings;
+        if (val >= b.threshold) { if (markEarned(b.id)) newOnes.push(b.id); }
+      });
+      BADGES.streak.forEach(b => {
+        if (streak >= b.streak) { if (markEarned(b.id)) newOnes.push(b.id); }
+      });
+
+      return newOnes;
+    }
+
+    /* ===== CONFETTI ===== */
+    function launchConfetti() {
+      const wrap  = document.getElementById('confettiWrap');
+      const emojis = ['🎉','⭐','✨','🌟','💫','🎊','🏅'];
+      wrap.innerHTML = '';
+      wrap.classList.add('show');
+      for (let i = 0; i < 22; i++) {
+        const piece = document.createElement('div');
+        piece.className = 'confetti-piece';
+        piece.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        piece.style.left  = Math.random() * 100 + 'vw';
+        piece.style.top   = '-30px';
+        piece.style.animationDelay = (Math.random() * 0.8) + 's';
+        piece.style.fontSize = (1 + Math.random()) + 'rem';
+        wrap.appendChild(piece);
+      }
+      setTimeout(() => { wrap.classList.remove('show'); wrap.innerHTML = ''; }, 2500);
+    }
+
+    /* ===== RENDER GRID ===== */
+    function renderGrid(gridId, badgeDefs, langDefs, earnedIds, lang) {
+      const c    = PG[lang];
+      const grid = document.getElementById(gridId);
+      grid.innerHTML = '';
+
+      badgeDefs.forEach((b, i) => {
+        const def      = langDefs[i];
+        const isEarned = earnedIds.includes(b.id);
+        const card     = document.createElement('div');
+        card.className = 'badge-card ' + (isEarned ? 'earned' : 'locked');
+        card.id        = 'badge-' + b.id;
+
+        card.innerHTML = `
+          <span class="badge-icon">${b.icon}</span>
+          <div class="badge-name">${def.name}</div>
+          <div class="badge-desc">${def.desc}</div>
+          <span class="${isEarned ? 'badge-earned-tag' : 'badge-locked-tag'}">
+            ${isEarned ? c.earnedTag : c.lockedTag}
+          </span>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    /* ===== RENDER ALL ===== */
+    function renderAll(lang) {
+      const c        = PG[lang];
+      const newOnes  = evaluateBadges();
+      const earnedIds= getEarnedIds();
+      const days     = getDaysSinceQuit();
+      const total    = BADGES.time.length + BADGES.milestone.length + BADGES.streak.length;
+
+      // Summary
+      document.getElementById('sbEarned').textContent = earnedIds.length;
+      document.getElementById('sbTotal').textContent  = total;
+      document.getElementById('sbDays').textContent   = days;
+
+      // Grids
+      renderGrid('timeBadgesGrid',      BADGES.time,      c.time,      earnedIds, lang);
+      renderGrid('milestoneBadgesGrid', BADGES.milestone, c.milestone, earnedIds, lang);
+      renderGrid('streakBadgesGrid',    BADGES.streak,    c.streak,    earnedIds, lang);
+
+      // Animate newly earned
+      if (newOnes.length > 0) {
+        newOnes.forEach((id, idx) => {
+          setTimeout(() => {
+            const el = document.getElementById('badge-' + id);
+            if (el) el.classList.add('just-earned');
+          }, idx * 300);
+        });
+        setTimeout(launchConfetti, 200);
+        showToast(c.newBadgeToast + ' ×' + newOnes.length);
+      }
+    }
+
+    /* ===== APPLY TRANSLATIONS ===== */
+    function applyTranslations(lang) {
+      const c   = PG[lang];
+      const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+
+      set('backBtn',            c.backBtn);
+      set('pageBadge',          c.pageBadge);
+      set('pageTitle',          c.pageTitle);
+      set('pageSubtitle',       c.pageSubtitle);
+      set('sbEarnedLabel',      c.sbEarnedLabel);
+      set('sbTotalLabel',       c.sbTotalLabel);
+      set('sbDaysLabel',        c.sbDaysLabel);
+      set('waTitle', c.waTitle);
+      set('waSub',   c.waSub);
+      set('waBtn',   c.waBtn);
+      set('timeBadgesTitle',    c.timeBadgesTitle);
+      set('milestoneBadgesTitle', c.milestoneBadgesTitle);
+      set('streakBadgesTitle',  c.streakBadgesTitle);
+
+      renderAll(lang);
+    }
+
+    /* ===== INIT ===== */
+    function doShare() {
+      const lang = document.body.classList.contains('en-mode') ? 'en' : 'ur';
+      shareOnWhatsApp(lang, 'badges');
+    }
+    initNavScroll();
+    initLang(applyTranslations);
+  </script>
+  <script src="chat.js"></script>
+</body>
+</html>

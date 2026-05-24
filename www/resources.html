@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="سانس — سگریٹ چھوڑنے کے لیے کتابیں، ویب سائٹس، ویڈیوز اور تحقیق۔" />
+  <title>سانس — مددگار وسائل</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;600;700&family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <style>
+    .resources-wrap {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 40px 28px 80px;
+    }
+
+    /* ===== FILTER TABS ===== */
+    .res-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 32px;
+    }
+    .res-tab {
+      border: 1px solid var(--border);
+      background: white;
+      color: var(--ink-2);
+      padding: 8px 18px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all var(--transition);
+      display: flex; align-items: center; gap: 6px;
+    }
+    .res-tab:hover { border-color: var(--green-mid); color: var(--green); background: var(--green-xlt); }
+    .res-tab.active { background: var(--green); color: white; border-color: var(--green); }
+
+    /* ===== BLOCK TITLE ===== */
+    .block-title {
+      font-family: var(--font-disp);
+      font-size: 1.15rem; color: var(--ink);
+      margin-bottom: 16px;
+      display: flex; align-items: center; gap: 8px;
+    }
+
+    /* ===== RESOURCE SECTION ===== */
+    .res-section { margin-bottom: 40px; }
+    .res-section.hidden { display: none; }
+
+    /* ===== BOOK CARDS ===== */
+    .books-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 16px;
+    }
+    .book-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transition: box-shadow var(--transition), transform var(--transition);
+      display: flex; flex-direction: column;
+    }
+    .book-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+    .book-cover {
+      height: 100px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 3.5rem;
+      position: relative;
+    }
+    .book-cover::before {
+      content: "";
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, var(--green-lt), #edf7f2);
+    }
+    .book-cover span { position: relative; z-index: 1; }
+    .book-body { padding: 16px; flex: 1; display: flex; flex-direction: column; gap: 8px; }
+    .book-title {
+      font-family: var(--font-disp);
+      font-size: 1rem; color: var(--ink); line-height: 1.3;
+    }
+    .book-author { font-size: 0.78rem; color: var(--ink-3); font-family: var(--font-en); }
+    .book-desc   { font-size: 0.82rem; color: var(--ink-2); line-height: 1.6; flex: 1; }
+    .book-tag {
+      display: inline-block;
+      background: var(--green-lt); color: var(--green);
+      font-size: 0.68rem; font-weight: 700;
+      padding: 2px 10px; border-radius: 999px;
+      font-family: var(--font-en); width: fit-content;
+    }
+    .book-link {
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      background: var(--green-lt); color: var(--green);
+      font-size: 0.8rem; font-weight: 700;
+      padding: 10px; text-decoration: none;
+      border-top: 1px solid var(--border);
+      transition: background var(--transition);
+      font-family: var(--font-en);
+    }
+    .book-link:hover { background: var(--green); color: white; }
+
+    /* ===== WEBSITE CARDS ===== */
+    .websites-list {
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .website-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 16px 18px;
+      display: flex; align-items: center; gap: 16px;
+      text-decoration: none; color: inherit;
+      transition: all var(--transition);
+      position: relative; overflow: hidden;
+    }
+    .website-card::before {
+      content: "";
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--green), var(--teal));
+    }
+    .website-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: var(--green-mid); }
+    .ws-icon {
+      width: 46px; height: 46px; border-radius: 12px;
+      background: var(--green-lt);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; flex-shrink: 0;
+    }
+    .ws-info { flex: 1; min-width: 0; }
+    .ws-name { font-size: 0.92rem; font-weight: 700; color: var(--ink); margin-bottom: 2px; }
+    .ws-desc { font-size: 0.78rem; color: var(--ink-3); line-height: 1.4; }
+    .ws-url  { font-size: 0.72rem; color: var(--green); font-family: var(--font-en); margin-top: 3px; }
+    .ws-arrow { color: var(--ink-3); font-size: 1rem; flex-shrink: 0; transition: transform var(--transition); }
+    .website-card:hover .ws-arrow { transform: translateX(3px); color: var(--green); }
+    .en-mode .website-card:hover .ws-arrow { transform: translateX(-3px); }
+
+    /* ===== VIDEO CARDS ===== */
+    .videos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+    }
+    .video-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      text-decoration: none; color: inherit;
+      transition: all var(--transition);
+    }
+    .video-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+    .video-thumb {
+      height: 120px;
+      background: linear-gradient(135deg, #1a1f2e, #2d3560);
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+    }
+    .video-play {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: rgba(255,255,255,.9);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem;
+      transition: transform var(--transition);
+    }
+    .video-card:hover .video-play { transform: scale(1.15); }
+    .video-platform {
+      position: absolute; top: 8px; right: 8px;
+      background: #FF0000; color: white;
+      font-size: 0.65rem; font-weight: 700;
+      padding: 2px 8px; border-radius: 3px;
+      font-family: var(--font-en);
+    }
+    .en-mode .video-platform { right: auto; left: 8px; }
+    .video-body { padding: 14px 14px; }
+    .video-title { font-size: 0.88rem; font-weight: 700; color: var(--ink); margin-bottom: 4px; line-height: 1.4; }
+    .video-channel{ font-size: 0.75rem; color: var(--ink-3); font-family: var(--font-en); }
+    .video-lang-tag {
+      display: inline-block; margin-top: 6px;
+      background: var(--green-lt); color: var(--green);
+      font-size: 0.65rem; font-weight: 700;
+      padding: 2px 8px; border-radius: 999px;
+      font-family: var(--font-en);
+    }
+
+    /* ===== RESEARCH CARDS ===== */
+    .research-list {
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .research-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 18px 18px;
+      text-decoration: none; color: inherit;
+      transition: all var(--transition);
+      position: relative; overflow: hidden;
+    }
+    .research-card::before {
+      content: "";
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #3a5fc5, #7c4dbc);
+    }
+    .research-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
+    .rc-top {
+      display: flex; align-items: flex-start;
+      justify-content: space-between; gap: 10px;
+      margin-bottom: 8px;
+    }
+    .rc-title { font-size: 0.9rem; font-weight: 700; color: var(--ink); line-height: 1.4; flex: 1; }
+    .rc-year  {
+      background: #e8f0ff; color: #3a5fc5;
+      font-size: 0.7rem; font-weight: 700;
+      padding: 2px 10px; border-radius: 999px;
+      font-family: var(--font-en); flex-shrink: 0;
+    }
+    .rc-journal{ font-size: 0.75rem; color: var(--ink-3); font-family: var(--font-en); margin-bottom: 6px; }
+    .rc-finding{ font-size: 0.82rem; color: var(--ink-2); line-height: 1.6; }
+    .rc-link {
+      display: inline-flex; align-items: center; gap: 4px;
+      margin-top: 8px;
+      font-size: 0.75rem; color: #3a5fc5; font-family: var(--font-en);
+      font-weight: 600; text-decoration: none;
+    }
+    .rc-link:hover { text-decoration: underline; }
+
+    /* ===== DISCLAIMER ===== */
+    .res-disclaimer {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: var(--radius-md); padding: 14px 16px;
+      font-size: 0.76rem; color: var(--ink-3); line-height: 1.6;
+      margin-top: 20px;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 600px) {
+      .resources-wrap { padding: 28px 16px 60px; }
+      .books-grid { grid-template-columns: 1fr 1fr; }
+      .videos-grid{ grid-template-columns: 1fr; }
+    }
+    @media (max-width: 400px) {
+      .books-grid { grid-template-columns: 1fr; }
+    }
+    .en-mode .website-card { direction: ltr; }
+    .en-mode .book-body    { direction: ltr; }
+    .en-mode .research-card{ direction: ltr; }
+    .en-mode .video-body   { direction: ltr; }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav" id="mainNav">
+    <div class="nav-logo">سانس<span>•</span></div>
+    <div class="nav-right">
+      <a href="app.html" class="back-btn" id="backBtn">← ہوم</a>
+      <a href="settings.html" class="back-btn" title="Settings" id="navSettings" style="padding:8px 10px;">⚙️</a>
+      <div class="lang-pill">
+        <button class="lang-btn active" id="btn-ur">اردو</button>
+        <button class="lang-btn" id="btn-en">English</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <div class="page-hero">
+    <div class="page-hero-inner">
+      <div class="page-badge" id="pageBadge">📚 مددگار وسائل</div>
+      <h1 id="pageTitle">وسائل اور رہنمائی</h1>
+      <p id="pageSubtitle">کتابیں، ویب سائٹس، ویڈیوز اور تحقیق — سگریٹ چھوڑنے کے لیے</p>
+    </div>
+  </div>
+
+  <div class="resources-wrap">
+
+    <!-- Filter tabs -->
+    <div class="res-tabs" id="resTabs"></div>
+
+    <!-- Books -->
+    <div class="res-section" id="secBooks">
+      <div class="block-title"><span>📖</span><span id="booksTitle">کتابیں</span></div>
+      <div class="books-grid" id="booksGrid"></div>
+    </div>
+
+    <!-- Websites -->
+    <div class="res-section" id="secWebsites">
+      <div class="block-title"><span>🌐</span><span id="websitesTitle">ویب سائٹس</span></div>
+      <div class="websites-list" id="websitesList"></div>
+    </div>
+
+    <!-- Videos -->
+    <div class="res-section" id="secVideos">
+      <div class="block-title"><span>▶️</span><span id="videosTitle">ویڈیوز</span></div>
+      <div class="videos-grid" id="videosGrid"></div>
+    </div>
+
+    <!-- Research -->
+    <div class="res-section" id="secResearch">
+      <div class="block-title"><span>🔬</span><span id="researchTitle">تحقیق</span></div>
+      <div class="research-list" id="researchList"></div>
+    </div>
+
+    <div class="res-disclaimer" id="resDisclaimer"></div>
+
+  </div>
+
+  <footer><p>© 2025 سانس · پاکستان کے لیے بنایا گیا ❤️</p></footer>
+
+  <script src="utils.js"></script>
+  <script>
+    const PG = {
+      ur: {
+        backBtn: "← ہوم", pageBadge: "📚 مددگار وسائل",
+        pageTitle: "وسائل اور رہنمائی",
+        pageSubtitle: "کتابیں، ویب سائٹس، ویڈیوز اور تحقیق — سگریٹ چھوڑنے کے لیے",
+        booksTitle: "کتابیں", websitesTitle: "ویب سائٹس",
+        videosTitle: "ویڈیوز", researchTitle: "تحقیق",
+        tabs: [
+          { key:'all',      label:'سب',       icon:'🌟' },
+          { key:'books',    label:'کتابیں',   icon:'📖' },
+          { key:'websites', label:'ویب سائٹس',icon:'🌐' },
+          { key:'videos',   label:'ویڈیوز',   icon:'▶️' },
+          { key:'research', label:'تحقیق',    icon:'🔬' },
+        ],
+        readLink: "پڑھیں ↗",
+        disclaimer: "⚠️ نوٹ: یہ وسائل عمومی معلومات کے لیے ہیں۔ کتابوں کے لنکس Amazon/Goodreads پر لے جاتے ہیں۔ سانس کا ان سے کوئی تجارتی تعلق نہیں۔",
+        books: [
+          {
+            emoji: "📗",
+            title: "یہ رات ختم ہوگی",
+            titleEn: "Allen Carr's Easy Way to Stop Smoking",
+            author: "Allen Carr",
+            desc: "دنیا میں سب سے زیادہ فروخت ہونے والی سگریٹ چھوڑنے کی کتاب۔ نفسیاتی طریقے سے سگریٹ کی خواہش ختم کرتی ہے۔",
+            tag: "Bestseller",
+            url: "https://www.goodreads.com/book/show/826550",
+          },
+          {
+            emoji: "⚛️",
+            title: "ایٹمی عادات",
+            titleEn: "Atomic Habits",
+            author: "James Clear",
+            desc: "چھوٹی تبدیلیوں سے بڑے نتائج — بری عادتیں چھوڑنے اور اچھی عادتیں اپنانے کا سائنسی طریقہ۔",
+            tag: "Must Read",
+            url: "https://www.goodreads.com/book/show/40121378",
+          },
+          {
+            emoji: "🧠",
+            title: "عادت کی طاقت",
+            titleEn: "The Power of Habit",
+            author: "Charles Duhigg",
+            desc: "عادتیں کیسے بنتی ہیں اور کیسے توڑی جاتی ہیں — سگریٹ چھوڑنے کے لیے انتہائی مفید۔",
+            tag: "Science",
+            url: "https://www.goodreads.com/book/show/12609433",
+          },
+          {
+            emoji: "🌊",
+            title: "کریونگ مائنڈ",
+            titleEn: "Craving Mind",
+            author: "Judson Brewer",
+            desc: "نشے اور خواہش کی نیورو سائنس — ذہن سازی سے سگریٹ چھوڑنے کا طریقہ۔",
+            tag: "Neuroscience",
+            url: "https://www.goodreads.com/book/show/25734357",
+          },
+          {
+            emoji: "💪",
+            title: "ول پاور",
+            titleEn: "Willpower",
+            author: "Roy Baumeister",
+            desc: "ارادے کی سائنس — خود پر قابو پانے اور برے رویے بدلنے کے عملی طریقے۔",
+            tag: "Psychology",
+            url: "https://www.goodreads.com/book/show/11104933",
+          },
+          {
+            emoji: "🔥",
+            title: "ڈرائیو",
+            titleEn: "Drive",
+            author: "Daniel Pink",
+            desc: "اندرونی محرک کی سائنس — آپ کو کیا چیز بدلنے پر مجبور کرتی ہے؟",
+            tag: "Motivation",
+            url: "https://www.goodreads.com/book/show/6452796",
+          },
+        ],
+        websites: [
+          { icon:"🏥", name:"WHO Tobacco Free Initiative", desc:"عالمی ادارہ صحت کا سگریٹ چھوڑنے کا مکمل گائیڈ", url:"who.int/tobacco", href:"https://www.who.int/health-topics/tobacco" },
+          { icon:"🇵🇰", name:"Ministry of Health Pakistan", desc:"پاکستان وزارت صحت — تمباکو کنٹرول پروگرام", url:"nhsrc.gov.pk", href:"https://www.nhsrc.gov.pk" },
+          { icon:"🧠", name:"Smokefree.gov", desc:"امریکی حکومت کا مفت سگریٹ چھوڑنے کا پروگرام", url:"smokefree.gov", href:"https://smokefree.gov" },
+          { icon:"❤️", name:"British Heart Foundation", desc:"دل کی صحت اور سگریٹ چھوڑنے کی مکمل رہنمائی", url:"bhf.org.uk", href:"https://www.bhf.org.uk/informationsupport/support/quit-smoking" },
+          { icon:"🌿", name:"NHS Quit Smoking", desc:"برطانوی نیشنل ہیلتھ سروس کا مفت پروگرام", url:"nhs.uk", href:"https://www.nhs.uk/live-well/quit-smoking" },
+          { icon:"📱", name:"QuitNow! App", desc:"دنیا کی مشہور ترین سگریٹ چھوڑنے کی ایپ", url:"quitnowapp.com", href:"https://quitnowapp.com" },
+        ],
+        videos: [
+          { emoji:"🎬", title:"سگریٹ چھوڑنے کے 10 آسان طریقے", channel:"Health Urdu", lang:"اردو", url:"https://www.youtube.com/results?search_query=cigarette+chorna+urdu" },
+          { emoji:"🧠", title:"Atomic Habits Summary", channel:"James Clear", lang:"English", url:"https://www.youtube.com/results?search_query=atomic+habits+summary" },
+          { emoji:"🫁", title:"What Happens to Your Lungs When You Quit", channel:"AsapSCIENCE", lang:"English", url:"https://www.youtube.com/results?search_query=what+happens+lungs+quit+smoking" },
+          { emoji:"💆", title:"Mindfulness for Cravings", channel:"Judson Brewer", lang:"English", url:"https://www.youtube.com/results?search_query=judson+brewer+craving+mindfulness" },
+          { emoji:"📖", title:"Allen Carr Easy Way — Summary", channel:"Book Summary", lang:"English", url:"https://www.youtube.com/results?search_query=allen+carr+easy+way+stop+smoking+summary" },
+          { emoji:"🇵🇰", title:"پاکستان میں سگریٹ نوشی کے اثرات", channel:"Geo Health", lang:"اردو", url:"https://www.youtube.com/results?search_query=smoking+effects+pakistan+urdu" },
+        ],
+        research: [
+          { title:"Effectiveness of NRT in Smoking Cessation", journal:"New England Journal of Medicine", year:"2023", finding:"نکوٹین ریپلیسمنٹ تھراپی سگریٹ چھوڑنے کی کامیابی کو 50-70٪ بڑھاتی ہے۔", url:"https://www.nejm.org" },
+          { title:"Mindfulness-Based Interventions for Smoking", journal:"JAMA Internal Medicine", year:"2022", finding:"ذہن سازی کی مشق craving کی شدت 40٪ تک کم کر سکتی ہے۔", url:"https://jamanetwork.com" },
+          { title:"Economic Burden of Tobacco in Pakistan", journal:"Pakistan Journal of Medical Sciences", year:"2023", finding:"پاکستان میں سگریٹ نوشی سے سالانہ 615 ارب روپے کا نقصان ہوتا ہے۔", url:"https://www.pjms.com.pk" },
+          { title:"Cardiovascular Recovery After Smoking Cessation", journal:"Circulation", year:"2022", finding:"سگریٹ چھوڑنے کے ایک سال بعد دل کا خطرہ 50٪ کم ہو جاتا ہے۔", url:"https://www.ahajournals.org/journal/circ" },
+          { title:"Varenicline vs NRT: Comparative Effectiveness", journal:"Cochrane Review", year:"2023", finding:"Varenicline NRT سے زیادہ مؤثر ہے لیکن دونوں کا مجموعہ سب سے بہتر نتائج دیتا ہے۔", url:"https://www.cochrane.org" },
+        ],
+      },
+      en: {
+        backBtn: "← Home", pageBadge: "📚 Helpful Resources",
+        pageTitle: "Resources & Guidance",
+        pageSubtitle: "Books, websites, videos and research — everything to help you quit",
+        booksTitle: "Books", websitesTitle: "Websites",
+        videosTitle: "Videos", researchTitle: "Research",
+        tabs: [
+          { key:'all',      label:'All',       icon:'🌟' },
+          { key:'books',    label:'Books',     icon:'📖' },
+          { key:'websites', label:'Websites',  icon:'🌐' },
+          { key:'videos',   label:'Videos',    icon:'▶️' },
+          { key:'research', label:'Research',  icon:'🔬' },
+        ],
+        readLink: "Read ↗",
+        disclaimer: "⚠️ Note: These resources are for general information. Book links go to Amazon/Goodreads. Saans has no commercial relationship with any of these.",
+        books: [
+          {
+            emoji: "📗",
+            title: "Allen Carr's Easy Way to Stop Smoking",
+            titleEn: "Allen Carr's Easy Way to Stop Smoking",
+            author: "Allen Carr",
+            desc: "The world's bestselling quit-smoking book. Uses psychological techniques to remove the desire to smoke entirely.",
+            tag: "Bestseller",
+            url: "https://www.goodreads.com/book/show/826550",
+          },
+          {
+            emoji: "⚛️",
+            title: "Atomic Habits",
+            titleEn: "Atomic Habits",
+            author: "James Clear",
+            desc: "Small changes, remarkable results. The science of breaking bad habits and building good ones.",
+            tag: "Must Read",
+            url: "https://www.goodreads.com/book/show/40121378",
+          },
+          {
+            emoji: "🧠",
+            title: "The Power of Habit",
+            titleEn: "The Power of Habit",
+            author: "Charles Duhigg",
+            desc: "How habits form and how to change them — highly practical for quitting smoking.",
+            tag: "Science",
+            url: "https://www.goodreads.com/book/show/12609433",
+          },
+          {
+            emoji: "🌊",
+            title: "The Craving Mind",
+            titleEn: "The Craving Mind",
+            author: "Judson Brewer",
+            desc: "The neuroscience of addiction and craving — using mindfulness to quit smoking.",
+            tag: "Neuroscience",
+            url: "https://www.goodreads.com/book/show/25734357",
+          },
+          {
+            emoji: "💪",
+            title: "Willpower",
+            titleEn: "Willpower",
+            author: "Roy Baumeister",
+            desc: "The science of self-control — practical ways to strengthen willpower and change bad behaviours.",
+            tag: "Psychology",
+            url: "https://www.goodreads.com/book/show/11104933",
+          },
+          {
+            emoji: "🔥",
+            title: "Drive",
+            titleEn: "Drive",
+            author: "Daniel Pink",
+            desc: "The science of intrinsic motivation — what truly compels us to change.",
+            tag: "Motivation",
+            url: "https://www.goodreads.com/book/show/6452796",
+          },
+        ],
+        websites: [
+          { icon:"🏥", name:"WHO Tobacco Free Initiative", desc:"World Health Organization's complete quit-smoking guide", url:"who.int/tobacco", href:"https://www.who.int/health-topics/tobacco" },
+          { icon:"🇵🇰", name:"Ministry of Health Pakistan", desc:"Pakistan's national tobacco control programme", url:"nhsrc.gov.pk", href:"https://www.nhsrc.gov.pk" },
+          { icon:"🧠", name:"Smokefree.gov", desc:"Free US government quit-smoking programme with tools and support", url:"smokefree.gov", href:"https://smokefree.gov" },
+          { icon:"❤️", name:"British Heart Foundation", desc:"Heart health and complete quit-smoking guidance", url:"bhf.org.uk", href:"https://www.bhf.org.uk/informationsupport/support/quit-smoking" },
+          { icon:"🌿", name:"NHS Quit Smoking", desc:"UK National Health Service free quit programme", url:"nhs.uk", href:"https://www.nhs.uk/live-well/quit-smoking" },
+          { icon:"📱", name:"QuitNow! App", desc:"One of the world's most popular quit-smoking apps", url:"quitnowapp.com", href:"https://quitnowapp.com" },
+        ],
+        videos: [
+          { emoji:"🫁", title:"What Happens to Your Body When You Quit Smoking", channel:"AsapSCIENCE", lang:"English", url:"https://www.youtube.com/results?search_query=what+happens+body+quit+smoking" },
+          { emoji:"🧠", title:"Atomic Habits — Full Summary", channel:"James Clear", lang:"English", url:"https://www.youtube.com/results?search_query=atomic+habits+summary" },
+          { emoji:"💆", title:"Mindfulness for Cravings", channel:"Judson Brewer", lang:"English", url:"https://www.youtube.com/results?search_query=judson+brewer+craving+mindfulness" },
+          { emoji:"📖", title:"Allen Carr Easy Way — Summary", channel:"Book Summary", lang:"English", url:"https://www.youtube.com/results?search_query=allen+carr+easy+way+stop+smoking+summary" },
+          { emoji:"🎬", title:"سگریٹ چھوڑنے کے طریقے", channel:"Health Urdu", lang:"اردو", url:"https://www.youtube.com/results?search_query=cigarette+chorna+urdu" },
+          { emoji:"🇵🇰", title:"Smoking in Pakistan — Documentary", channel:"Geo Health", lang:"اردو / English", url:"https://www.youtube.com/results?search_query=smoking+pakistan+documentary" },
+        ],
+        research: [
+          { title:"Effectiveness of NRT in Smoking Cessation", journal:"New England Journal of Medicine", year:"2023", finding:"Nicotine Replacement Therapy increases quit success rates by 50–70% compared to willpower alone.", url:"https://www.nejm.org" },
+          { title:"Mindfulness-Based Interventions for Smoking", journal:"JAMA Internal Medicine", year:"2022", finding:"Mindfulness practice can reduce craving intensity by up to 40%.", url:"https://jamanetwork.com" },
+          { title:"Economic Burden of Tobacco in Pakistan", journal:"Pakistan Journal of Medical Sciences", year:"2023", finding:"Tobacco costs Pakistan PKR 615 billion annually in healthcare and productivity losses.", url:"https://www.pjms.com.pk" },
+          { title:"Cardiovascular Recovery After Smoking Cessation", journal:"Circulation", year:"2022", finding:"Heart disease risk drops by 50% within one year of quitting smoking.", url:"https://www.ahajournals.org/journal/circ" },
+          { title:"Varenicline vs NRT: Comparative Effectiveness", journal:"Cochrane Review", year:"2023", finding:"Varenicline is more effective than NRT alone, but combining both produces the best outcomes.", url:"https://www.cochrane.org" },
+        ],
+      },
+    };
+
+    /* ===== STATE ===== */
+    let activeTab = 'all';
+
+    /* ===== RENDER TABS ===== */
+    function renderTabs(lang) {
+      const wrap = document.getElementById('resTabs');
+      wrap.innerHTML = '';
+      PG[lang].tabs.forEach(tab => {
+        const btn = document.createElement('button');
+        btn.className = 'res-tab' + (activeTab === tab.key ? ' active' : '');
+        btn.innerHTML = `${tab.icon} ${tab.label}`;
+        btn.addEventListener('click', () => {
+          activeTab = tab.key;
+          renderTabs(lang);
+          filterSections();
+        });
+        wrap.appendChild(btn);
+      });
+    }
+
+    function filterSections() {
+      const sections = { books:'secBooks', websites:'secWebsites', videos:'secVideos', research:'secResearch' };
+      Object.entries(sections).forEach(([key, id]) => {
+        const el = document.getElementById(id);
+        el.classList.toggle('hidden', activeTab !== 'all' && activeTab !== key);
+      });
+    }
+
+    /* ===== RENDER BOOKS ===== */
+    function renderBooks(lang) {
+      const grid = document.getElementById('booksGrid');
+      grid.innerHTML = '';
+      PG[lang].books.forEach(book => {
+        const card = document.createElement('div');
+        card.className = 'book-card';
+        card.innerHTML = `
+          <div class="book-cover"><span>${book.emoji}</span></div>
+          <div class="book-body">
+            <div class="book-title">${book.title}</div>
+            <div class="book-author">${book.author}</div>
+            <div class="book-desc">${book.desc}</div>
+            <span class="book-tag">${book.tag}</span>
+          </div>
+          <a href="${book.url}" target="_blank" rel="noopener" class="book-link">
+            📖 ${PG[lang].readLink}
+          </a>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    /* ===== RENDER WEBSITES ===== */
+    function renderWebsites(lang) {
+      const list = document.getElementById('websitesList');
+      list.innerHTML = '';
+      PG[lang].websites.forEach(site => {
+        const card = document.createElement('a');
+        card.className = 'website-card';
+        card.href   = site.href;
+        card.target = '_blank';
+        card.rel    = 'noopener';
+        card.innerHTML = `
+          <div class="ws-icon">${site.icon}</div>
+          <div class="ws-info">
+            <div class="ws-name">${site.name}</div>
+            <div class="ws-desc">${site.desc}</div>
+            <div class="ws-url">${site.url}</div>
+          </div>
+          <span class="ws-arrow">›</span>
+        `;
+        list.appendChild(card);
+      });
+    }
+
+    /* ===== RENDER VIDEOS ===== */
+    function renderVideos(lang) {
+      const grid = document.getElementById('videosGrid');
+      grid.innerHTML = '';
+      PG[lang].videos.forEach(vid => {
+        const card = document.createElement('a');
+        card.className = 'video-card';
+        card.href   = vid.url;
+        card.target = '_blank';
+        card.rel    = 'noopener';
+        card.innerHTML = `
+          <div class="video-thumb">
+            <div class="video-play">▶</div>
+            <span class="video-platform">YouTube</span>
+          </div>
+          <div class="video-body">
+            <div class="video-title">${vid.emoji} ${vid.title}</div>
+            <div class="video-channel">${vid.channel}</div>
+            <span class="video-lang-tag">${vid.lang}</span>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    /* ===== RENDER RESEARCH ===== */
+    function renderResearch(lang) {
+      const list = document.getElementById('researchList');
+      list.innerHTML = '';
+      PG[lang].research.forEach(r => {
+        const card = document.createElement('div');
+        card.className = 'research-card';
+        card.innerHTML = `
+          <div class="rc-top">
+            <div class="rc-title">${r.title}</div>
+            <span class="rc-year">${r.year}</span>
+          </div>
+          <div class="rc-journal">${r.journal}</div>
+          <div class="rc-finding">${r.finding}</div>
+          <a href="${r.url}" target="_blank" rel="noopener" class="rc-link">View Source ↗</a>
+        `;
+        list.appendChild(card);
+      });
+    }
+
+    /* ===== APPLY TRANSLATIONS ===== */
+    function applyTranslations(lang) {
+      const c   = PG[lang];
+      const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+      set('backBtn', c.backBtn); set('pageBadge', c.pageBadge);
+      set('pageTitle', c.pageTitle); set('pageSubtitle', c.pageSubtitle);
+      set('booksTitle', c.booksTitle); set('websitesTitle', c.websitesTitle);
+      set('videosTitle', c.videosTitle); set('researchTitle', c.researchTitle);
+      document.getElementById('resDisclaimer').textContent = c.disclaimer;
+
+      renderTabs(lang);
+      filterSections();
+      renderBooks(lang);
+      renderWebsites(lang);
+      renderVideos(lang);
+      renderResearch(lang);
+    }
+
+    /* ===== INIT ===== */
+    initNavScroll();
+    initReveal();
+    initLang(applyTranslations);
+  </script>
+  <script src="chat.js"></script>
+</body>
+</html>

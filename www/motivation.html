@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="سانس — روزانہ حوصلہ افزا پیغام اور پسندیدہ اقوال۔" />
+  <title>سانس — روزانہ موٹیویشن</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;600;700&family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+    .motivation-wrap {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 40px 28px 80px;
+    }
+
+    /* ===== DAILY QUOTE CARD ===== */
+    .quote-card {
+      background: linear-gradient(135deg, #0d3d26 0%, #1a5e3a 60%, #0d6e5e 100%);
+      border-radius: var(--radius-lg);
+      padding: 48px 36px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+    .quote-card::before {
+      content: "";
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    .quote-card-inner { position: relative; z-index: 1; }
+
+    .quote-day-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.2);
+      color: rgba(255,255,255,.85);
+      padding: 5px 16px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-family: var(--font-en);
+      letter-spacing: 0.04em;
+      margin-bottom: 28px;
+    }
+    .quote-day-badge .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #5de09a;
+      animation: pulse 2s infinite;
+    }
+
+    .quote-mark {
+      font-size: 4rem;
+      color: rgba(255,255,255,.15);
+      font-family: var(--font-disp);
+      line-height: 1;
+      margin-bottom: -10px;
+      display: block;
+    }
+
+    .quote-text {
+      font-family: var(--font-disp);
+      font-size: clamp(1.3rem, 4vw, 1.9rem);
+      color: white;
+      line-height: 1.5;
+      margin-bottom: 20px;
+      transition: opacity 0.4s ease;
+    }
+    .quote-text.fade { opacity: 0; }
+
+    .quote-author {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,.55);
+      font-family: var(--font-en);
+      margin-bottom: 28px;
+      font-style: italic;
+    }
+
+    .quote-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .q-btn {
+      border: none;
+      cursor: pointer;
+      border-radius: 999px;
+      font-family: inherit;
+      font-weight: 600;
+      font-size: 0.88rem;
+      padding: 10px 22px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      transition: all var(--transition);
+    }
+    .q-btn-fav {
+      background: rgba(255,255,255,.15);
+      color: white;
+      border: 1px solid rgba(255,255,255,.25);
+    }
+    .q-btn-fav:hover { background: rgba(255,255,255,.25); }
+    .q-btn-fav.saved { background: var(--accent); border-color: var(--accent); }
+    .q-btn-share {
+      background: rgba(255,255,255,.1);
+      color: rgba(255,255,255,.8);
+      border: 1px solid rgba(255,255,255,.15);
+    }
+    .q-btn-share:hover { background: rgba(255,255,255,.2); }
+
+    /* Progress within day */
+    .quote-progress {
+      margin-top: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .qp-label { font-size: 0.75rem; color: rgba(255,255,255,.45); font-family: var(--font-en); }
+    .qp-bar-wrap {
+      width: 120px; height: 4px;
+      background: rgba(255,255,255,.15);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .qp-bar {
+      height: 100%;
+      background: #5de09a;
+      border-radius: 999px;
+      transition: width 0.6s ease;
+    }
+
+    /* ===== STREAK MINI CARD ===== */
+    .streak-mini {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+    .sm-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 16px 12px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .sm-card::before {
+      content: "";
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--green), var(--teal));
+    }
+    .sm-num {
+      font-family: var(--font-disp);
+      font-size: 1.6rem;
+      color: var(--green);
+      font-weight: 700;
+      display: block;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .sm-label { font-size: 0.75rem; color: var(--ink-3); line-height: 1.3; }
+
+    /* ===== SECTION TITLE ===== */
+    .block-title {
+      font-family: var(--font-disp);
+      font-size: 1.2rem;
+      color: var(--ink);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* ===== FAVOURITES ===== */
+    .favs-empty {
+      background: white;
+      border: 1px dashed var(--border);
+      border-radius: var(--radius-md);
+      padding: 36px 20px;
+      text-align: center;
+      color: var(--ink-3);
+      font-size: 0.88rem;
+      margin-bottom: 28px;
+    }
+    .favs-empty .fe-icon { font-size: 2rem; margin-bottom: 8px; display: block; }
+
+    .favs-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+    .fav-item {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 18px 20px;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      transition: box-shadow var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    .fav-item::before {
+      content: "";
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), #f0c060);
+    }
+    .fav-item:hover { box-shadow: var(--shadow-sm); }
+    .fav-star { font-size: 1.2rem; flex-shrink: 0; margin-top: 2px; }
+    .fav-text { flex: 1; }
+    .fav-quote {
+      font-size: 0.95rem;
+      color: var(--ink);
+      line-height: 1.6;
+      margin-bottom: 4px;
+      font-family: var(--font-disp);
+    }
+    .fav-author { font-size: 0.78rem; color: var(--ink-3); font-style: italic; font-family: var(--font-en); }
+    .fav-remove {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--ink-3);
+      font-size: 1rem;
+      padding: 4px 6px;
+      border-radius: var(--radius-sm);
+      transition: background var(--transition), color var(--transition);
+      flex-shrink: 0;
+    }
+    .fav-remove:hover { background: #fde8e8; color: var(--danger); }
+
+    /* ===== ALL QUOTES GRID ===== */
+    .all-quotes-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+    .aq-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 18px 16px;
+      position: relative;
+      overflow: hidden;
+      transition: box-shadow var(--transition), transform var(--transition);
+    }
+    .aq-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
+    .aq-text {
+      font-size: 0.88rem;
+      color: var(--ink);
+      line-height: 1.6;
+      margin-bottom: 10px;
+    }
+    .aq-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .aq-author { font-size: 0.72rem; color: var(--ink-3); font-style: italic; font-family: var(--font-en); }
+    .aq-fav-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+      padding: 2px 4px;
+      border-radius: 4px;
+      transition: transform var(--transition);
+      line-height: 1;
+    }
+    .aq-fav-btn:hover { transform: scale(1.3); }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 560px) {
+      .motivation-wrap { padding: 28px 16px 60px; }
+      .quote-card { padding: 32px 20px; }
+      .all-quotes-grid { grid-template-columns: 1fr; }
+      .streak-mini { grid-template-columns: repeat(3,1fr); }
+    }
+    @media (max-width: 380px) {
+      .streak-mini { grid-template-columns: 1fr; }
+    }
+
+    /* ===== PERSONAL MOTIVATION BANNER ===== */
+    .motiv-personal {
+      background: linear-gradient(135deg, var(--green), var(--teal));
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      margin-bottom: 20px;
+      display: none;
+      align-items: center;
+      gap: 14px;
+      color: white;
+    }
+    .motiv-personal.show { display: flex; }
+    .mp-icon { font-size: 1.6rem; flex-shrink: 0; }
+    .mp-text { flex: 1; }
+    .mp-label { font-size: 0.7rem; font-weight: 700; color: rgba(255,255,255,.6);
+      text-transform: uppercase; letter-spacing: 0.06em; font-family: var(--font-en); margin-bottom: 2px; }
+    .mp-value { font-size: 0.95rem; font-weight: 700; color: white; }
+    .en-mode .motiv-personal { direction: ltr; }
+
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav" id="mainNav">
+    <div class="nav-logo">سانس<span>•</span></div>
+    <div class="nav-right">
+      <a href="app.html" class="back-btn" id="backBtn">← ہوم</a>
+      <a href="settings.html" class="back-btn" title="Settings" id="navSettings" style="padding:8px 10px;">⚙️</a>
+      <div class="lang-pill">
+        <button class="lang-btn active" id="btn-ur">اردو</button>
+        <button class="lang-btn" id="btn-en">English</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <div class="page-hero">
+    <div class="page-hero-inner">
+      <div class="page-badge" id="pageBadge">💬 روزانہ موٹیویشن</div>
+      <h1 id="pageTitle">آج کا پیغام</h1>
+      <p id="pageSubtitle">ہر دن ایک نیا حوصلہ افزا پیغام — صرف آپ کے لیے</p>
+    </div>
+  </div>
+
+  <div class="motivation-wrap">
+
+    <!-- PERSONAL MOTIVATION BANNER -->
+    <div class="motiv-personal" id="motivPersonal">
+      <div class="mp-icon" id="mpIcon">🎯</div>
+      <div class="mp-text">
+        <div class="mp-label" id="mpLabel">آپ کی وجہ</div>
+        <div class="mp-value" id="mpValue"></div>
+      </div>
+    </div>
+
+        <!-- Daily quote card -->
+    <div class="quote-card">
+      <div class="quote-card-inner">
+        <div class="quote-day-badge"><span class="dot"></span><span id="dayBadge">آج کا اقوال</span></div>
+        <span class="quote-mark">"</span>
+        <div class="quote-text" id="quoteText">ہر دن ایک نیا موقع ہے۔</div>
+        <div class="quote-author" id="quoteAuthor">— سانس</div>
+        <div class="quote-actions">
+          <button class="q-btn q-btn-fav" id="favBtn" onclick="toggleFavourite()">
+            <span id="favIcon">♡</span><span id="favLabel">پسندیدہ</span>
+          </button>
+          <button class="q-btn q-btn-share" id="shareBtn" onclick="shareQuote()">
+            <span>↗</span><span id="shareLabel">شیئر کریں</span>
+          </button>
+        </div>
+        <div class="quote-progress">
+          <span class="qp-label" id="qpLabel">دن</span>
+          <div class="qp-bar-wrap"><div class="qp-bar" id="qpBar"></div></div>
+          <span class="qp-label" id="qpDayNum">1</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Streak mini -->
+    <div class="streak-mini">
+      <div class="sm-card">
+        <span class="sm-num" id="smDays">0</span>
+        <span class="sm-label" id="smDaysLabel">دن سگریٹ فری</span>
+      </div>
+      <div class="sm-card">
+        <span class="sm-num" id="smStreak">0</span>
+        <span class="sm-label" id="smStreakLabel">موجودہ سٹریک</span>
+      </div>
+      <div class="sm-card">
+        <span class="sm-num" id="smFavs">0</span>
+        <span class="sm-label" id="smFavsLabel">پسندیدہ اقوال</span>
+      </div>
+    </div>
+
+    <!-- Favourites -->
+    <div class="block-title"><span>⭐</span><span id="favsTitle">پسندیدہ اقوال</span></div>
+    <div id="favsContainer"></div>
+
+    <!-- All quotes -->
+    <div class="block-title"><span>📚</span><span id="allTitle">تمام اقوال</span></div>
+    <div class="all-quotes-grid" id="allQuotesGrid"></div>
+
+  </div>
+
+  <footer>
+    <p>© 2025 سانس · پاکستان کے لیے بنایا گیا ❤️</p>
+  </footer>
+
+  <script src="utils.js"></script>
+  <script>
+    /* ===== QUOTES ===== */
+    const QUOTES = {
+      ur: [
+        { text: "ہر دن ایک نیا موقع ہے۔", author: "سانس" },
+        { text: "تم اس سے زیادہ مضبوط ہو جتنا تم سوچتے ہو۔", author: "سانس" },
+        { text: "خواہش آتی ہے، مگر گزر جاتی بھی ہے۔", author: "سانس" },
+        { text: "آج کا ہر لمحہ آپ کی صحت کی طرف ایک قدم ہے۔", author: "سانس" },
+        { text: "سگریٹ چھوڑنا مشکل ہے، مگر بیمار ہونا اس سے بھی مشکل ہے۔", author: "سانس" },
+        { text: "آپ کا جسم آپ کا شکریہ ادا کر رہا ہے۔", author: "سانس" },
+        { text: "ایک دن، ایک لمحہ — بس اتنا کافی ہے۔", author: "سانس" },
+        { text: "جیت وہی پاتا ہے جو ہار نہیں مانتا۔", author: "سانس" },
+        { text: "آپ کی سانسیں آزاد ہیں — انہیں آزاد رکھیں۔", author: "سانس" },
+        { text: "پھیپھڑے ٹھیک ہو رہے ہیں — جسم شکرگزار ہے۔", author: "سانس" },
+        { text: "آج کی جیت کل کی حوصلہ افزائی ہے۔", author: "سانس" },
+        { text: "ہر craving صرف 5-10 منٹ رہتی ہے — آپ اس سے مضبوط ہیں۔", author: "سانس" },
+        { text: "صحت ہی سب سے بڑی دولت ہے۔", author: "سانس" },
+        { text: "آپ نے آج جو انتخاب کیا وہ آپ کو بدل رہا ہے۔", author: "سانس" },
+        { text: "ہمت کرنے والوں کی کبھی ہار نہیں ہوتی۔", author: "سانس" },
+        { text: "گھر والے آپ سے محبت کرتے ہیں — ان کے لیے بھی ٹھیک رہیں۔", author: "سانس" },
+        { text: "آج کی تکلیف کل کی خوشی ہے۔", author: "سانس" },
+        { text: "سانس لینا کتنا خوبصورت ہے جب پھیپھڑے صاف ہوں۔", author: "سانس" },
+        { text: "آپ نے شروع کیا — یہی سب سے بڑی کامیابی ہے۔", author: "سانس" },
+        { text: "ایک صحت مند زندگی آپ کا حق ہے۔", author: "سانس" },
+        { text: "کل جو غلطی ہوئی آج اسے درست کریں۔", author: "سانس" },
+        { text: "آپ کی اولاد آپ کو دیکھ رہی ہے — انہیں ایک مضبوط والدین دکھائیں۔", author: "سانس" },
+        { text: "یہ لمحہ گزر جائے گا — آپ کی ہمت نہیں جائے گی۔", author: "سانس" },
+        { text: "پیسے بھی بچے، صحت بھی — آج بھی، کل بھی۔", author: "سانس" },
+        { text: "سکون اندر سے آتا ہے — سگریٹ سے نہیں۔", author: "سانس" },
+        { text: "آپ نے جو راستہ چنا وہ روشن ہے۔", author: "سانس" },
+        { text: "ہر نئی صبح ایک نئی شروعات ہے۔", author: "سانس" },
+        { text: "جسم بدل رہا ہے — بہتری کی طرف۔", author: "سانس" },
+        { text: "آپ کی مرضی سگریٹ سے زیادہ طاقتور ہے۔", author: "سانس" },
+        { text: "آج ایک دن — کل ایک ہفتہ — پھر ایک مہینہ۔ آپ کر سکتے ہیں۔", author: "سانس" },
+      ],
+      en: [
+        { text: "Every day is a fresh start.", author: "Saans" },
+        { text: "You are stronger than you think.", author: "Saans" },
+        { text: "Cravings come — and they go. You are stronger.", author: "Saans" },
+        { text: "Every moment today is a step toward your health.", author: "Saans" },
+        { text: "Quitting is hard. Being sick is harder.", author: "Saans" },
+        { text: "Your body is thanking you right now.", author: "Saans" },
+        { text: "One day at a time. One moment at a time.", author: "Saans" },
+        { text: "Winners never quit. Quitters never win — except smoking.", author: "Saans" },
+        { text: "Your lungs are free — keep them that way.", author: "Saans" },
+        { text: "Your lungs are healing. Your body is grateful.", author: "Saans" },
+        { text: "Today's win is tomorrow's motivation.", author: "Saans" },
+        { text: "Every craving lasts 5-10 minutes. You are stronger than that.", author: "Saans" },
+        { text: "Health is the greatest wealth.", author: "Saans" },
+        { text: "The choice you made today is changing you.", author: "Saans" },
+        { text: "Those who keep going never truly lose.", author: "Saans" },
+        { text: "Your family loves you — stay well for them too.", author: "Saans" },
+        { text: "Today's struggle is tomorrow's strength.", author: "Saans" },
+        { text: "Breathing is beautiful when your lungs are clean.", author: "Saans" },
+        { text: "You started — that is the greatest victory.", author: "Saans" },
+        { text: "A healthy life is your right.", author: "Saans" },
+        { text: "Yesterday's mistake becomes today's lesson.", author: "Saans" },
+        { text: "Your children are watching — show them a strong parent.", author: "Saans" },
+        { text: "This moment will pass — your courage will not.", author: "Saans" },
+        { text: "Money saved, health gained — today and tomorrow.", author: "Saans" },
+        { text: "Peace comes from within — not from a cigarette.", author: "Saans" },
+        { text: "The path you have chosen is a bright one.", author: "Saans" },
+        { text: "Every new morning is a new beginning.", author: "Saans" },
+        { text: "Your body is changing — for the better.", author: "Saans" },
+        { text: "Your willpower is stronger than any craving.", author: "Saans" },
+        { text: "One day. One week. One month. You can do this.", author: "Saans" },
+      ],
+    };
+
+    /* ===== HELPERS ===== */
+    // Get today's quote index using the day of year so it changes daily
+    function getDayOfYear() {
+      const now   = new Date();
+      const start = new Date(now.getFullYear(), 0, 0);
+      return Math.floor((now - start) / 86400000);
+    }
+    function getTodayQuoteIdx(lang) {
+      return getDayOfYear() % QUOTES[lang].length;
+    }
+    function getDaysSinceEpoch() {
+      return Math.floor(Date.now() / 86400000);
+    }
+
+    /* ===== FAVOURITES ===== */
+    function getFavs() { return LS.get('favQuotes', []); }
+    function setFavs(arr) { LS.set('favQuotes', arr); }
+
+    function isFav(lang, idx) {
+      return getFavs().some(f => f.lang === lang && f.idx === idx);
+    }
+
+    function toggleFavourite() {
+      const lang   = document.body.classList.contains('en-mode') ? 'en' : 'ur';
+      const idx    = getTodayQuoteIdx(lang);
+      const favs   = getFavs();
+      const exists = favs.findIndex(f => f.lang === lang && f.idx === idx);
+      if (exists >= 0) {
+        favs.splice(exists, 1);
+        showToast(lang === 'ur' ? 'پسندیدہ سے ہٹا دیا' : 'Removed from favourites');
+      } else {
+        favs.push({ lang, idx });
+        showToast(lang === 'ur' ? '⭐ پسندیدہ میں شامل!' : '⭐ Added to favourites!');
+      }
+      setFavs(favs);
+      refreshFavBtn(lang, idx);
+      renderFavs(lang);
+      renderAllQuotes(lang);
+      updateSmFavs();
+    }
+
+    function removeFav(lang, idx) {
+      const favs = getFavs().filter(f => !(f.lang === lang && f.idx === idx));
+      setFavs(favs);
+      const curLang = document.body.classList.contains('en-mode') ? 'en' : 'ur';
+      renderFavs(curLang);
+      renderAllQuotes(curLang);
+      refreshFavBtn(curLang, getTodayQuoteIdx(curLang));
+      updateSmFavs();
+      showToast(curLang === 'ur' ? 'پسندیدہ سے ہٹا دیا' : 'Removed from favourites');
+    }
+
+    function refreshFavBtn(lang, idx) {
+      const saved = isFav(lang, idx);
+      const btn   = document.getElementById('favBtn');
+      btn.classList.toggle('saved', saved);
+      document.getElementById('favIcon').textContent  = saved ? '★' : '♡';
+      document.getElementById('favLabel').textContent = saved
+        ? (lang === 'ur' ? 'محفوظ ہے' : 'Saved')
+        : PG[lang].favLabel;
+    }
+
+    function updateSmFavs() {
+      document.getElementById('smFavs').textContent = getFavs().length;
+    }
+
+    /* ===== SHARE ===== */
+    function shareQuote() {
+      const lang  = document.body.classList.contains('en-mode') ? 'en' : 'ur';
+      const idx   = getTodayQuoteIdx(lang);
+      const q     = QUOTES[lang][idx];
+      const msg   = `"${q.text}" — ${q.author}\n\nسانس ایپ | saans.app`;
+      if (navigator.share) {
+        navigator.share({ text: msg }).catch(() => {});
+      } else {
+        navigator.clipboard.writeText(msg).then(() => {
+          showToast(lang === 'ur' ? '✓ کاپی ہو گیا!' : '✓ Copied to clipboard!');
+        }).catch(() => {
+          showToast(lang === 'ur' ? 'شیئر نہیں ہو سکا' : 'Could not share');
+        });
+      }
+    }
+
+    /* ===== RENDER FAVOURITES ===== */
+    function renderFavs(lang) {
+      const c      = PG[lang];
+      const favs   = getFavs();
+      const container = document.getElementById('favsContainer');
+      container.innerHTML = '';
+
+      if (!favs.length) {
+        container.innerHTML = `
+          <div class="favs-empty">
+            <span class="fe-icon">⭐</span>
+            <span id="favsEmptyText">${c.favsEmpty}</span>
+          </div>`;
+        return;
+      }
+
+      const list = document.createElement('div');
+      list.className = 'favs-list';
+
+      favs.forEach(({ lang: fLang, idx }) => {
+        // Show in current language if available, else show in saved language
+        const displayLang = QUOTES[lang] ? lang : fLang;
+        const q = QUOTES[displayLang][idx] || QUOTES[fLang][idx];
+        if (!q) return;
+        const item = document.createElement('div');
+        item.className = 'fav-item';
+        item.innerHTML = `
+          <span class="fav-star">⭐</span>
+          <div class="fav-text">
+            <div class="fav-quote">${q.text}</div>
+            <div class="fav-author">— ${q.author}</div>
+          </div>
+          <button class="fav-remove" title="${c.removeFav}" onclick="removeFav('${fLang}',${idx})">✕</button>
+        `;
+        list.appendChild(item);
+      });
+      container.appendChild(list);
+    }
+
+    /* ===== RENDER ALL QUOTES ===== */
+    function renderAllQuotes(lang) {
+      const grid = document.getElementById('allQuotesGrid');
+      grid.innerHTML = '';
+      QUOTES[lang].forEach((q, idx) => {
+        const saved = isFav(lang, idx);
+        const card  = document.createElement('div');
+        card.className = 'aq-card';
+        card.innerHTML = `
+          <div class="aq-text">${q.text}</div>
+          <div class="aq-footer">
+            <span class="aq-author">— ${q.author}</span>
+            <button class="aq-fav-btn" title="${saved ? PG[lang].removeFav : PG[lang].addFav}"
+              onclick="toggleAqFav('${lang}',${idx})">${saved ? '★' : '☆'}</button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function toggleAqFav(lang, idx) {
+      const favs   = getFavs();
+      const exists = favs.findIndex(f => f.lang === lang && f.idx === idx);
+      if (exists >= 0) { favs.splice(exists, 1); }
+      else             { favs.push({ lang, idx }); }
+      setFavs(favs);
+      const curLang = document.body.classList.contains('en-mode') ? 'en' : 'ur';
+      renderFavs(curLang);
+      renderAllQuotes(curLang);
+      refreshFavBtn(curLang, getTodayQuoteIdx(curLang));
+      updateSmFavs();
+      showToast(exists >= 0
+        ? (curLang === 'ur' ? 'پسندیدہ سے ہٹا دیا' : 'Removed from favourites')
+        : (curLang === 'ur' ? '⭐ پسندیدہ میں شامل!' : '⭐ Added to favourites!')
+      );
+    }
+
+    /* ===== PROGRESS BAR (how far through the day) ===== */
+    function updateProgressBar() {
+      const now     = new Date();
+      const pct     = ((now.getHours() * 60 + now.getMinutes()) / 1440) * 100;
+      document.getElementById('qpBar').style.width = pct + '%';
+      document.getElementById('qpDayNum').textContent = getDaysSinceQuit() || '—';
+    }
+
+    /* ===== TRANSLATIONS ===== */
+    const PG = {
+      ur: {
+        backBtn: "← ہوم",
+        pageBadge: "💬 روزانہ موٹیویشن",
+        pageTitle: "آج کا پیغام",
+        pageSubtitle: "ہر دن ایک نیا حوصلہ افزا پیغام — صرف آپ کے لیے",
+        dayBadge: "آج کا اقوال",
+        favLabel: "پسندیدہ",
+        shareLabel: "شیئر کریں",
+        qpLabel: "دن",
+        smDaysLabel: "دن سگریٹ فری",
+        smStreakLabel: "موجودہ سٹریک",
+        smFavsLabel: "پسندیدہ اقوال",
+        favsTitle: "پسندیدہ اقوال",
+        allTitle: "تمام اقوال",
+        favsEmpty: "ابھی کوئی پسندیدہ نہیں — ♡ دبائیں",
+        removeFav: "ہٹائیں",
+        addFav: "پسندیدہ میں شامل کریں",
+      },
+      en: {
+        backBtn: "← Home",
+        pageBadge: "💬 Daily Motivation",
+        pageTitle: "Today's Message",
+        pageSubtitle: "A fresh motivational quote every day — just for you",
+        dayBadge: "Quote of the Day",
+        favLabel: "Favourite",
+        shareLabel: "Share",
+        qpLabel: "Day",
+        smDaysLabel: "Days Smoke-Free",
+        smStreakLabel: "Current Streak",
+        smFavsLabel: "Saved Quotes",
+        favsTitle: "Favourite Quotes",
+        allTitle: "All Quotes",
+        favsEmpty: "No favourites yet — press ♡ to save one",
+        removeFav: "Remove",
+        addFav: "Add to favourites",
+      },
+    };
+
+
+    /* ===== PERSONAL MOTIVATION ===== */
+    const MOTIV_DETAIL = {
+      ur: {
+        health:  { icon:"❤️",  text:"آپ کا مقصد: اپنی صحت بہتر کرنا" },
+        family:  { icon:"👨‍👩‍👧", text:"آپ کا مقصد: خاندان کی خاطر" },
+        money:   { icon:"💰",  text:"آپ کا مقصد: پیسے بچانا" },
+        fitness: { icon:"🏃",  text:"آپ کا مقصد: بہتر ورزش اور توانائی" },
+        pride:   { icon:"🌟",  text:"آپ کا مقصد: خود پر فخر محسوس کرنا" },
+        doctor:  { icon:"🩺",  text:"آپ کا مقصد: ڈاکٹر کے مشورے پر عمل" },
+      },
+      en: {
+        health:  { icon:"❤️",  text:"Your goal: Improve your health" },
+        family:  { icon:"👨‍👩‍👧", text:"Your goal: For your family" },
+        money:   { icon:"💰",  text:"Your goal: Save money" },
+        fitness: { icon:"🏃",  text:"Your goal: Better fitness and energy" },
+        pride:   { icon:"🌟",  text:"Your goal: Feel proud of yourself" },
+        doctor:  { icon:"🩺",  text:"Your goal: Follow your doctor's advice" },
+      },
+    };
+
+    function showPersonalMotiv(lang) {
+      const motiv  = LS.get('motivation', '');
+      const name   = LS.get('userName', '');
+      const el     = document.getElementById('motivPersonal');
+      if (!motiv || !MOTIV_DETAIL[lang][motiv]) { el.classList.remove('show'); return; }
+      const detail = MOTIV_DETAIL[lang][motiv];
+      document.getElementById('mpIcon').textContent  = detail.icon;
+      document.getElementById('mpLabel').textContent = name
+        ? (lang === 'ur' ? name + ' کی وجہ' : name + "'s reason")
+        : (lang === 'ur' ? 'آپ کی وجہ' : 'Your reason');
+      document.getElementById('mpValue').textContent = detail.text;
+      el.classList.add('show');
+    }
+
+    /* ===== APPLY TRANSLATIONS ===== */
+    function applyTranslations(lang) {
+      const c   = PG[lang];
+      const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+
+      set('backBtn', c.backBtn);
+      set('pageBadge', c.pageBadge);
+      set('pageTitle', c.pageTitle);
+      set('pageSubtitle', c.pageSubtitle);
+      set('dayBadge', c.dayBadge);
+      set('favLabel', c.favLabel);
+      set('shareLabel', c.shareLabel);
+      set('qpLabel', c.qpLabel);
+      set('smDaysLabel', c.smDaysLabel);
+      set('smStreakLabel', c.smStreakLabel);
+      set('smFavsLabel', c.smFavsLabel);
+      set('favsTitle', c.favsTitle);
+      set('allTitle', c.allTitle);
+
+      // Today's quote
+      const idx = getTodayQuoteIdx(lang);
+      const q   = QUOTES[lang][idx];
+      const qtEl = document.getElementById('quoteText');
+      qtEl.classList.add('fade');
+      setTimeout(() => {
+        qtEl.textContent = q.text;
+        document.getElementById('quoteAuthor').textContent = '— ' + q.author;
+        qtEl.classList.remove('fade');
+      }, 300);
+
+      // Stats
+      set('smDays',   getDaysSinceQuit());
+      set('smStreak', getStreak());
+      updateSmFavs();
+      updateProgressBar();
+      refreshFavBtn(lang, idx);
+      renderFavs(lang);
+      renderAllQuotes(lang);
+      showPersonalMotiv(lang);
+    }
+
+    /* ===== INIT ===== */
+    initNavScroll();
+    initLang(applyTranslations);
+  </script>
+  <script src="chat.js"></script>
+</body>
+</html>
