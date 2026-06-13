@@ -13,7 +13,7 @@
     .ob-overlay {
       position: fixed; inset: 0;
       z-index: 9999;
-      background: linear-gradiegit initnt(160deg, #0d3d26 0%, #1a5e3a 50%, #0d6e5e 100%);
+      background: linear-gradient(160deg, #0d3d26 0%, #1a5e3a 50%, #0d6e5e 100%);
       display: flex; align-items: center; justify-content: center;
       padding: 20px;
       overflow-y: auto;
@@ -258,19 +258,13 @@
 
     /* ===== DASHBOARD ===== */
 
-    /* Page wrapper — flex column so footer always sits at bottom */
-    body {
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
     footer {
       position: relative;
       z-index: 20;
+      clear: both;
     }
 
     .dashboard {
-      flex: 1;
       max-width: 100%;
       margin-top: 60px;
     }
@@ -389,7 +383,6 @@
       background: var(--bg);
       padding: 28px 28px 80px;
       box-sizing: border-box;
-      min-height: calc(100vh - 60px);
     }
 
     /* Quote + craving side by side */
@@ -785,6 +778,14 @@
     .en-mode .emergency-card    { direction: ltr; }
     .en-mode .checkin-card      { direction: ltr; }
   </style>
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-7HBVT7Y3P7"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-7HBVT7Y3P7');
+  </script>
 </head>
 <body>
 
@@ -1178,6 +1179,7 @@
           ["Health Journey","How your body is healing"],
           ["Helplines","Support numbers in Pakistan"],
           ["Resources","Books, videos & research"],
+          ["Helplines","Support in Pakistan"],
           ["Leaderboard","Streak rankings"],
         ],
         emTitle: "Craving right now?",
@@ -1619,9 +1621,6 @@
       set('wsSavedLabel',  c.wsSavedLabel);
       set('wsCigsLabel',   c.wsCigsLabel);
       set('wsStreakLabel', c.wsStreakLabel);
-      set('waTitle', c.waTitle);
-      set('waSub',   c.waSub);
-      set('waBtn',   c.waBtn);
       set('checkinYesLabel', c.checkinYesLabel);
       set('checkinNoLabel',  c.checkinNoLabel);
       set('checkinDoneLabel',c.checkinDoneLabel);
@@ -1636,6 +1635,9 @@
 
       refreshDashboard(lang);
       applyPersonalisation(lang);
+      set('waTitle', c.waTitle);
+      set('waSub',   c.waSub);
+      set('waBtn',   c.waBtn);
 
       // Relapse / streak recovery labels
       set('srTitle',             c.srTitle);
@@ -1896,7 +1898,7 @@
       // Set today as default quit date
       document.getElementById('obQuitDate').value = new Date().toISOString().slice(0,10);
       // Set lang
-     obLang = LS.get('lang', 'ur');
+      obLang = LS.get('lang', 'ur');
       // Build welcome text
       const c = OB[obLang];
       document.getElementById('obWelcomeH').textContent = c.welcomeH;
