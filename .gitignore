@@ -1,0 +1,3 @@
+echo node_modules/ > .gitignore
+echo android/ >> .gitignore
+echo www/ >> .gitignore

@@ -7,6 +7,12 @@
   <title>سانس — ترتیبات</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;600;700&family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1a7a4a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="سانس">
+  <link rel="apple-touch-icon" href="icon-192.png">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <style>
     .settings-wrap {
@@ -145,6 +151,14 @@
     .en-mode .danger-body{ direction: ltr; }
     .en-mode .danger-row { direction: ltr; }
   </style>
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-7HBVT7Y3P7"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-7HBVT7Y3P7');
+  </script>
 </head>
 <body>
 
@@ -153,6 +167,7 @@
     <div class="nav-logo">سانس<span>•</span></div>
     <div class="nav-right">
       <a href="app.html" class="back-btn" id="backBtn">← ہوم</a>
+      <a href="settings.html" class="back-btn" title="Settings" id="navSettings" style="padding:8px 10px;">⚙️</a>
       <div class="lang-pill">
         <button class="lang-btn active" id="btn-ur">اردو</button>
         <button class="lang-btn" id="btn-en">English</button>
@@ -261,6 +276,26 @@
       </div>
     </div>
 
+    <!-- Notifications -->
+    <div class="settings-card">
+      <div class="sc-header">
+        <span class="sc-header-icon">🔔</span>
+        <h3 id="notifTitle">اطلاعات</h3>
+      </div>
+      <div class="sc-body">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+          <div>
+            <div class="form-label" id="notifLabel">روزانہ یاددہانی</div>
+            <div class="form-hint" id="notifHint">چیک‑ان اور سٹریک کی یاددہانی</div>
+          </div>
+          <button class="save-btn" id="notifBtn" onclick="toggleNotifications()" style="white-space:nowrap;">
+            <span id="notifBtnLabel">فعال کریں</span>
+          </button>
+        </div>
+        <div id="notifStatus" style="font-size:0.78rem;color:var(--green);display:none;">✓ <span id="notifStatusText">اطلاعات فعال ہیں</span></div>
+      </div>
+    </div>
+
     <!-- AI Coach API Key -->
     <div class="settings-card">
       <div class="sc-header">
@@ -351,6 +386,12 @@
         clearAllTitle: "سب کچھ ری سیٹ کریں",
         clearAllDesc: "تمام ڈیٹا حذف کریں اور نئے سرے سے شروع کریں۔",
         clearAllBtn: "مکمل ری سیٹ",
+        notifTitle: "اطلاعات",
+        notifLabel: "روزانہ یاددہانی",
+        notifHint: "چیک‑ان اور سٹریک کی یاددہانی",
+        notifBtnLabel: "فعال کریں",
+        notifBtnLabelOff: "بند کریں",
+        notifStatusText: "اطلاعات فعال ہیں",
         apiKeyTitle: "AI کوچ — API Key",
         lblApiKey: "Anthropic API Key",
         apiKeyHint: "آپ کی key صرف اس ڈیوائس پر محفوظ رہتی ہے — کسی سرور پر نہیں جاتی",
@@ -390,6 +431,12 @@
         clearAllTitle: "Reset Everything",
         clearAllDesc: "Delete all data and start fresh.",
         clearAllBtn: "Full Reset",
+        notifTitle: "Notifications",
+        notifLabel: "Daily Reminder",
+        notifHint: "Check-in and streak reminders",
+        notifBtnLabel: "Enable",
+        notifBtnLabelOff: "Disable",
+        notifStatusText: "Notifications are enabled",
         apiKeyTitle: "AI Coach — API Key",
         lblApiKey: "Anthropic API Key",
         apiKeyHint: "Your key is stored only on this device — never sent to any server",
@@ -436,6 +483,33 @@
         LS.remove('anthropicApiKey');
         showToast(lang === 'ur' ? 'Key ہٹا دی گئی' : 'API key removed');
       }
+    }
+
+
+    async function toggleNotifications() {
+      const lang    = document.body.classList.contains('en-mode') ? 'en' : 'ur';
+      const enabled = localStorage.getItem('notificationsEnabled') === 'true';
+      if (enabled) {
+        localStorage.removeItem('notificationsEnabled');
+        localStorage.removeItem('fcmToken');
+        document.getElementById('notifBtnLabel').textContent = PG[lang].notifBtnLabel;
+        document.getElementById('notifStatus').style.display = 'none';
+        showToast(lang === 'ur' ? 'اطلاعات بند کر دی گئیں' : 'Notifications disabled');
+      } else {
+        const ok = await requestNotificationPermission(lang);
+        if (ok) {
+          document.getElementById('notifBtnLabel').textContent = PG[lang].notifBtnLabelOff;
+          document.getElementById('notifStatus').style.display = 'block';
+        }
+      }
+    }
+
+    function updateNotifStatus(lang) {
+      const enabled = localStorage.getItem('notificationsEnabled') === 'true';
+      const btn     = document.getElementById('notifBtnLabel');
+      const status  = document.getElementById('notifStatus');
+      if (btn)    btn.textContent = enabled ? PG[lang].notifBtnLabelOff : PG[lang].notifBtnLabel;
+      if (status) status.style.display = enabled ? 'block' : 'none';
     }
 
     function saveProfile() {
@@ -496,7 +570,17 @@
     /* ===== INIT ===== */
     initNavScroll();
     initLang(applyTranslations);
+    const _notifLang = localStorage.getItem('lang') ? JSON.parse(localStorage.getItem('lang')) : 'ur';
+    initNotifications(_notifLang);
   </script>
+  <script src="nav.js"></script>
+  <script src="notifications.js"></script>
   <script src="chat.js"></script>
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("sw.js").catch(() => {});
+    }
+  </script>
 </body>
 </html>

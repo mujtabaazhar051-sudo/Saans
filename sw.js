@@ -1,31 +1,70 @@
-/* ================================================
+/* =======================================================
    SAANS — Service Worker (sw.js)
-   Caches key pages for offline access.
-   ================================================ */
+   Handles caching + push notifications.
+   ======================================================= */
 
-const CACHE_NAME = 'saans-v1';
+importScripts('https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js');
+importScripts('https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging-compat.js');
+
+// Firebase config
+firebase.initializeApp({
+  apiKey:            "AIzaSyCle5cJcgH_uIZC4tOoD-wTqAfghLJIOFA",
+  authDomain:        "saans-3206a.firebaseapp.com",
+  projectId:         "saans-3206a",
+  storageBucket:     "saans-3206a.firebasestorage.app",
+  messagingSenderId: "203356336705",
+  appId:             "1:203356336705:web:00c8ded21431df1c8cccc0",
+});
+
+const messaging = firebase.messaging();
+
+// Handle background messages
+messaging.onBackgroundMessage(payload => {
+  const { title, body, icon } = payload.notification || {};
+  self.registration.showNotification(title || 'سانس', {
+    body:  body  || 'آج کا چیک‑ان باقی ہے 🌿',
+    icon:  icon  || '/Saans/icon-192.png',
+    badge: '/Saans/icon-192.png',
+    tag:   'saans-notification',
+    data:  payload.data || {},
+    actions: [
+      { action: 'checkin', title: '✓ چیک‑ان کریں' },
+      { action: 'dismiss', title: 'بعد میں' },
+    ]
+  });
+});
+
+// Handle notification click
+self.addEventListener('notificationclick', e => {
+  e.notification.close();
+  const url = e.action === 'checkin'
+    ? '/Saans/app.html'
+    : '/Saans/app.html';
+  e.waitUntil(clients.openWindow(url));
+});
+
+// ── Caching ────────────────────────────────────────
+const CACHE_NAME = 'saans-v2';
 const ASSETS = [
-  '/saans/',
-  '/saans/index.html',
-  '/saans/app.html',
-  '/saans/styles.css',
-  '/saans/utils.js',
-  '/saans/chat.js',
-  '/saans/nav.js',
-  '/saans/tracker.html',
-  '/saans/savings.html',
-  '/saans/breathing.html',
-  '/saans/motivation.html',
-  '/saans/badges.html',
-  '/saans/health.html',
-  '/saans/tips.html',
-  '/saans/helplines.html',
-  '/saans/resources.html',
-  '/saans/settings.html',
-  '/saans/favicon.ico',
+  '/Saans/',
+  '/Saans/index.html',
+  '/Saans/app.html',
+  '/Saans/styles.css',
+  '/Saans/utils.js',
+  '/Saans/chat.js',
+  '/Saans/nav.js',
+  '/Saans/tracker.html',
+  '/Saans/savings.html',
+  '/Saans/breathing.html',
+  '/Saans/motivation.html',
+  '/Saans/badges.html',
+  '/Saans/health.html',
+  '/Saans/settings.html',
+  '/Saans/favicon.ico',
+  '/Saans/icon-192.png',
+  '/Saans/icon-512.png',
 ];
 
-// Install — cache all assets
 self.addEventListener('install', e => {
   e.waitUntil(
     caches.open(CACHE_NAME)
@@ -34,7 +73,6 @@ self.addEventListener('install', e => {
   );
 });
 
-// Activate — clean old caches
 self.addEventListener('activate', e => {
   e.waitUntil(
     caches.keys().then(keys =>
@@ -43,17 +81,13 @@ self.addEventListener('activate', e => {
   );
 });
 
-// Fetch — serve from cache, fall back to network
 self.addEventListener('fetch', e => {
-  // Skip non-GET and cross-origin requests
   if (e.request.method !== 'GET') return;
   if (!e.request.url.startsWith(self.location.origin)) return;
-
   e.respondWith(
     caches.match(e.request).then(cached => {
       if (cached) return cached;
       return fetch(e.request).then(response => {
-        // Cache successful responses
         if (response && response.status === 200) {
           const clone = response.clone();
           caches.open(CACHE_NAME).then(cache => cache.put(e.request, clone));
@@ -61,9 +95,8 @@ self.addEventListener('fetch', e => {
         return response;
       });
     }).catch(() => {
-      // Offline fallback
       if (e.request.destination === 'document') {
-        return caches.match('/saans/app.html');
+        return caches.match('/Saans/app.html');
       }
     })
   );
